@@ -27,12 +27,12 @@ export const ExamResultModal: React.FC<ExamResultModalProps> = ({
   const isPassed = percentage >= 60;
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className="max-w-xl mx-auto space-y-4 sm:space-y-6 pb-20 md:pb-6 px-1">
       {/* Result Card */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl text-center space-y-6">
-        <div className="inline-flex p-4 rounded-2xl bg-slate-800/80 border border-slate-700/60 mx-auto">
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-8 shadow-2xl text-center space-y-5 sm:space-y-6">
+        <div className="inline-flex p-3 sm:p-4 rounded-2xl bg-slate-800/80 border border-slate-700/60 mx-auto">
           <Award
-            className={`w-14 h-14 ${
+            className={`w-12 h-12 sm:w-14 sm:h-14 ${
               isPassed ? 'text-emerald-400' : 'text-rose-400'
             }`}
           />
@@ -48,10 +48,10 @@ export const ExamResultModal: React.FC<ExamResultModalProps> = ({
           >
             {isPassed ? t('passed') : t('failed')}
           </span>
-          <h1 className="text-3xl font-black text-white tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
             {percentage}%
           </h1>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-xs sm:text-sm text-slate-400 mt-1">
             {language === 'zh'
               ? `總共 ${total} 題，答對 ${score} 題，答錯 ${wrongQuestions.length} 題`
               : `Total ${total} questions, ${score} correct, ${wrongQuestions.length} incorrect`}
@@ -59,36 +59,36 @@ export const ExamResultModal: React.FC<ExamResultModalProps> = ({
         </div>
 
         {/* C&G Standard Notice */}
-        <div className="p-3 bg-slate-950 rounded-xl border border-slate-800/80 text-xs text-slate-400 font-mono">
+        <div className="p-3 bg-slate-950 rounded-xl border border-slate-800/80 text-[11px] sm:text-xs text-slate-400 font-mono">
           {t('passThresholdNotice')} (≥ 60% PASS)
         </div>
 
-        {/* Quick Stats Grid */}
-        <div className="grid grid-cols-2 gap-3 pt-2">
-          <div className="bg-slate-800/50 border border-slate-700/50 p-4 rounded-xl flex items-center space-x-3">
-            <CheckCircle2 className="w-6 h-6 text-emerald-400 shrink-0" />
+        {/* Stats Grid */}
+        <div className="grid grid-cols-2 gap-2 sm:gap-3">
+          <div className="bg-slate-800/50 border border-slate-700/50 p-3 sm:p-4 rounded-xl flex items-center space-x-2.5">
+            <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-400 shrink-0" />
             <div className="text-left">
-              <div className="text-xs text-slate-400">{t('correct')}</div>
-              <div className="text-lg font-bold font-mono text-emerald-300">{score}</div>
+              <div className="text-[10px] sm:text-xs text-slate-400">{t('correct')}</div>
+              <div className="text-base sm:text-lg font-bold font-mono text-emerald-300">{score}</div>
             </div>
           </div>
-          <div className="bg-slate-800/50 border border-slate-700/50 p-4 rounded-xl flex items-center space-x-3">
-            <XCircle className="w-6 h-6 text-rose-400 shrink-0" />
+          <div className="bg-slate-800/50 border border-slate-700/50 p-3 sm:p-4 rounded-xl flex items-center space-x-2.5">
+            <XCircle className="w-5 h-5 sm:w-6 sm:h-6 text-rose-400 shrink-0" />
             <div className="text-left">
-              <div className="text-xs text-slate-400">{t('incorrect')}</div>
-              <div className="text-lg font-mono font-bold text-rose-300">
+              <div className="text-[10px] sm:text-xs text-slate-400">{t('incorrect')}</div>
+              <div className="text-base sm:text-lg font-mono font-bold text-rose-300">
                 {wrongQuestions.length}
               </div>
             </div>
           </div>
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4 border-t border-slate-800">
+        {/* Action Buttons (Mobile-First Stacked) */}
+        <div className="flex flex-col sm:flex-row items-stretch justify-center gap-2 sm:gap-3 pt-3 border-t border-slate-800">
           {wrongQuestions.length > 0 && (
             <button
               onClick={onGoToWrong}
-              className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold shadow-md transition flex items-center justify-center space-x-2"
+              className="py-3 px-4 rounded-xl bg-rose-600 hover:bg-rose-500 active:scale-98 text-white text-xs font-bold shadow-md transition flex items-center justify-center space-x-1.5"
             >
               <AlertTriangle className="w-4 h-4" />
               <span>{t('reviewMistakes')} ({wrongQuestions.length})</span>
@@ -97,7 +97,7 @@ export const ExamResultModal: React.FC<ExamResultModalProps> = ({
 
           <button
             onClick={onRetake}
-            className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition flex items-center justify-center space-x-2"
+            className="py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-98 text-slate-200 text-xs font-semibold border border-slate-700 transition flex items-center justify-center space-x-1.5"
           >
             <RotateCcw className="w-4 h-4" />
             <span>{t('retakeExam')}</span>
@@ -105,7 +105,7 @@ export const ExamResultModal: React.FC<ExamResultModalProps> = ({
 
           <button
             onClick={onExit}
-            className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold transition flex items-center justify-center space-x-2"
+            className="py-3 px-4 rounded-xl bg-cyan-600 hover:bg-cyan-500 active:scale-98 text-white text-xs font-bold transition flex items-center justify-center space-x-1.5"
           >
             <span>{language === 'zh' ? '返回主頁' : 'Back to Home'}</span>
             <ArrowRight className="w-4 h-4" />

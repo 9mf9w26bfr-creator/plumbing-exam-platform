@@ -22,7 +22,7 @@ export const UnitList: React.FC<UnitListProps> = ({
     return (
       <div className="flex flex-col items-center justify-center min-h-[300px] space-y-3">
         <div className="w-8 h-8 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
-        <p className="text-sm text-slate-400">{t('loading')}</p>
+        <p className="text-xs sm:text-sm text-slate-400">{t('loading')}</p>
       </div>
     );
   }
@@ -30,15 +30,15 @@ export const UnitList: React.FC<UnitListProps> = ({
   const getCategoryIcon = (cat: string) => {
     switch (cat.toLowerCase()) {
       case 'core':
-        return <ShieldCheck className="w-4 h-4 text-emerald-400" />;
+        return <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />;
       case 'technical':
-        return <Cpu className="w-4 h-4 text-cyan-400" />;
+        return <Cpu className="w-3.5 h-3.5 text-cyan-400" />;
       case 'professional':
-        return <Briefcase className="w-4 h-4 text-amber-400" />;
+        return <Briefcase className="w-3.5 h-3.5 text-amber-400" />;
       case 'environmental revision':
-        return <Leaf className="w-4 h-4 text-lime-400" />;
+        return <Leaf className="w-3.5 h-3.5 text-lime-400" />;
       default:
-        return <GraduationCap className="w-4 h-4 text-cyan-400" />;
+        return <GraduationCap className="w-3.5 h-3.5 text-cyan-400" />;
     }
   };
 
@@ -58,66 +58,67 @@ export const UnitList: React.FC<UnitListProps> = ({
   };
 
   return (
-    <div className="space-y-6">
-      {/* Track B Header */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 sm:p-6 shadow-sm">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div className="space-y-4 sm:space-y-6 pb-20 md:pb-6">
+      {/* Track B Header (Mobile-Optimized) */}
+      <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 sm:p-6 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <div className="flex items-center space-x-2 text-cyan-400 text-xs font-mono font-semibold uppercase tracking-wider mb-1">
-              <GraduationCap className="w-4 h-4" />
+            <div className="flex items-center space-x-1.5 text-cyan-400 text-[10px] sm:text-xs font-mono font-semibold uppercase tracking-wider mb-1">
+              <GraduationCap className="w-3.5 h-3.5" />
               <span>Track B: Qualification Unit Mapping (考綱認證單元體系)</span>
             </div>
-            <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+            <h1 className="text-lg sm:text-2xl font-bold text-white tracking-tight">
               {language === 'zh'
-                ? '按 City & Guilds 6035/8202 官方考試代碼刷題'
+                ? '按 City & Guilds 6035/8202 官方考證代碼刷題'
                 : 'Practice by Qualification Units (6035/8202)'}
             </h1>
-            <p className="text-sm text-slate-400 mt-1">
+            <p className="text-xs sm:text-sm text-slate-400 mt-1">
               {language === 'zh'
-                ? '聚焦資格考證單元。涵蓋健康安全、冷熱水、電氣原理等考綱單元，以及大綱核實的環保節能複習分類。'
-                : 'Aligned with official C&G assessment criteria. Includes core, technical systems, and verified environmental revision.'}
+                ? '聚焦資格考核單元。涵蓋健康安全、冷熱水、電氣原理等考綱單元及環保複習分類。'
+                : 'Aligned with official C&G assessment criteria. Core & technical modules.'}
             </p>
           </div>
-          <div className="flex items-center bg-slate-800/80 border border-slate-700/60 rounded-lg px-4 py-2 self-start md:self-auto">
-            <span className="text-xs text-slate-400 mr-2">
+
+          <div className="flex items-center space-x-2 bg-slate-800/80 border border-slate-700/60 rounded-lg px-3 py-1.5 self-start sm:self-auto shrink-0">
+            <span className="text-[11px] text-slate-400">
               {language === 'zh' ? '考綱單元數:' : 'Total Units:'}
             </span>
-            <span className="text-sm font-bold font-mono text-cyan-400">10 Units</span>
+            <span className="text-xs sm:text-sm font-bold font-mono text-cyan-400">10 Units</span>
           </div>
         </div>
       </div>
 
-      {/* Units Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {/* Units Grid (1 col on mobile, 2 on tablet, 3 on desktop) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
         {units.map((unit) => (
           <div
             key={unit.id}
-            className="bg-slate-900/90 border border-slate-800 hover:border-slate-700 rounded-xl p-5 flex flex-col justify-between transition-all duration-200 hover:shadow-lg hover:shadow-cyan-950/20 group"
+            className="bg-slate-900/90 border border-slate-800 hover:border-slate-700 rounded-xl p-4 sm:p-5 flex flex-col justify-between transition-all duration-200 hover:shadow-lg hover:shadow-cyan-950/20 group"
           >
             <div>
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-mono font-semibold px-2.5 py-1 rounded-md bg-slate-800 text-cyan-300 border border-slate-700">
+              <div className="flex items-center justify-between mb-2 sm:mb-3">
+                <span className="text-[11px] font-mono font-semibold px-2 py-0.5 rounded-md bg-slate-800 text-cyan-300 border border-slate-700">
                   {unit.id}
                 </span>
-                <span className={`text-[11px] font-mono px-2 py-0.5 rounded border flex items-center space-x-1 ${getCategoryBadgeClass(unit.category)}`}>
+                <span className={`text-[10px] font-mono px-2 py-0.5 rounded border flex items-center space-x-1 ${getCategoryBadgeClass(unit.category)}`}>
                   {getCategoryIcon(unit.category)}
                   <span>{unit.category}</span>
                 </span>
               </div>
 
-              <h2 className="text-base font-bold text-white group-hover:text-cyan-300 transition-colors">
+              <h2 className="text-sm sm:text-base font-bold text-white group-hover:text-cyan-300 transition-colors">
                 {unit.title}
               </h2>
 
-              <p className="text-xs text-slate-400 mt-2">
+              <p className="text-xs text-slate-400 mt-1.5 line-clamp-2">
                 {unit.id === 'Unit_ENV'
                   ? (language === 'zh' ? '經大綱核實之節能環保複習分類，非獨立 L2 考單元' : 'Syllabus-verified energy conservation & eco-revision category')
                   : (language === 'zh' ? 'C&G 6035 / 8202 核心評估單元模塊' : 'Standard C&G 6035/8202 core assessment module')}
               </p>
             </div>
 
-            <div className="mt-5 pt-4 border-t border-slate-800/80 flex items-center justify-between">
-              <span className="text-xs text-slate-400">
+            <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between gap-2">
+              <span className="text-[11px] text-slate-400">
                 <span className="text-cyan-400 font-bold mr-1">
                   {unit.question_count || 0}
                 </span>
@@ -125,7 +126,7 @@ export const UnitList: React.FC<UnitListProps> = ({
               </span>
               <button
                 onClick={() => onSelectUnit(unit.id)}
-                className="flex items-center space-x-1.5 py-1.5 px-3 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg text-xs font-semibold transition shadow-sm"
+                className="flex items-center space-x-1.5 py-2 px-3.5 bg-cyan-600 hover:bg-cyan-500 active:bg-cyan-650 active:scale-95 text-white rounded-lg text-xs font-bold transition shadow-sm"
               >
                 <span>{t('startPractice')}</span>
                 <ArrowRight className="w-3.5 h-3.5" />

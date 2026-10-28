@@ -182,7 +182,7 @@ export default function Home() {
         wrongCount={wrongCount}
       />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-3.5 sm:py-8 pb-24 md:pb-8">
         {/* Active Quiz Player */}
         {quizState ? (
           <QuizPlayer
@@ -266,7 +266,7 @@ export default function Home() {
       </main>
 
       {/* Engineering Footer */}
-      <footer className="border-t border-slate-900 bg-slate-950 py-6 text-center text-xs text-slate-500 space-y-2">
+      <footer className="border-t border-slate-900 bg-slate-950 pt-5 pb-24 md:pb-6 text-center text-xs text-slate-500 space-y-2 px-4">
         <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-1 font-mono text-[11px]">
           <span>Project Constitution Compliant</span>
           <span>•</span>
