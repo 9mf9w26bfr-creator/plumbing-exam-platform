@@ -19,12 +19,14 @@ interface NavbarProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
   wrongCount: number;
+  hideMobileBottomBar?: boolean;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   activeTab,
   setActiveTab,
   wrongCount,
+  hideMobileBottomBar = false,
 }) => {
   const { language, toggleLanguage, t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
@@ -169,36 +171,38 @@ export const Navbar: React.FC<NavbarProps> = ({
       </header>
 
       {/* Mobile-First Fixed Bottom Navigation Bar (Thumb Friendly) */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 px-2 py-1 shadow-2xl safe-area-inset-bottom">
-        <div className="grid grid-cols-5 gap-1">
-          {mainNavItems.slice(0, 5).map((item) => {
-            const Icon = item.icon;
-            const isActive = activeTab === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => handleTabClick(item.id)}
-                className={`flex flex-col items-center justify-center py-1.5 px-1 rounded-lg text-[10px] font-medium transition relative active:scale-95 ${
-                  isActive ? 'text-cyan-400 font-bold' : 'text-slate-400 hover:text-slate-200'
-                }`}
-              >
-                <div className="relative">
-                  <Icon className={`w-5 h-5 mb-0.5 ${isActive ? 'stroke-[2.5]' : 'stroke-[1.75]'}`} />
-                  {item.badge !== undefined && (
-                    <span className="absolute -top-1 -right-2 min-w-[14px] h-[14px] px-1 rounded-full text-[9px] font-bold bg-rose-500 text-white flex items-center justify-center leading-none">
-                      {item.badge}
-                    </span>
+      {!hideMobileBottomBar && (
+        <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 px-2 py-1 shadow-2xl safe-area-inset-bottom">
+          <div className="grid grid-cols-5 gap-1">
+            {mainNavItems.slice(0, 5).map((item) => {
+              const Icon = item.icon;
+              const isActive = activeTab === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => handleTabClick(item.id)}
+                  className={`flex flex-col items-center justify-center py-1.5 px-1 rounded-lg text-[10px] font-medium transition relative active:scale-95 ${
+                    isActive ? 'text-cyan-400 font-bold' : 'text-slate-400 hover:text-slate-200'
+                  }`}
+                >
+                  <div className="relative">
+                    <Icon className={`w-5 h-5 mb-0.5 ${isActive ? 'stroke-[2.5]' : 'stroke-[1.75]'}`} />
+                    {item.badge !== undefined && (
+                      <span className="absolute -top-1 -right-2 min-w-[14px] h-[14px] px-1 rounded-full text-[9px] font-bold bg-rose-500 text-white flex items-center justify-center leading-none">
+                        {item.badge}
+                      </span>
+                    )}
+                  </div>
+                  <span className="truncate max-w-[56px] leading-tight mt-0.5">{item.shortLabel}</span>
+                  {isActive && (
+                    <span className="w-3.5 h-0.5 rounded-full bg-cyan-400 absolute bottom-0.5"></span>
                   )}
-                </div>
-                <span className="truncate max-w-[56px] leading-tight mt-0.5">{item.shortLabel}</span>
-                {isActive && (
-                  <span className="w-3.5 h-0.5 rounded-full bg-cyan-400 absolute bottom-0.5"></span>
-                )}
-              </button>
-            );
-          })}
-        </div>
-      </nav>
+                </button>
+              );
+            })}
+          </div>
+        </nav>
+      )}
     </>
   );
 };

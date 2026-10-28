@@ -8,6 +8,8 @@ import {
   Globe,
   ArrowLeft,
   ArrowRight,
+  ChevronLeft,
+  ChevronRight,
   Flag,
   CheckCircle2,
   XCircle,
@@ -56,6 +58,57 @@ export const QuizPlayer: React.FC<QuizPlayerProps> = ({
   const [timeLeft, setTimeLeft] = useState(initialTimeMinutes * 60);
   const [showPalette, setShowPalette] = useState(false);
   const [showConfirmSubmit, setShowConfirmSubmit] = useState(false);
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
+  const [touchStartY, setTouchStartY] = useState<number | null>(null);
+
+  const goToPrevQuestion = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex((prev) => prev - 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const goToNextQuestion = () => {
+    if (currentIndex < questions.length - 1) {
+      setCurrentIndex((prev) => prev + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStartX(e.touches[0].clientX);
+    setTouchStartY(e.touches[0].clientY);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX === null || touchStartY === null) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartX;
+    const deltaY = e.changedTouches[0].clientY - touchStartY;
+
+    if (Math.abs(deltaX) > 45 && Math.abs(deltaX) > Math.abs(deltaY) * 1.4) {
+      if (deltaX < 0) {
+        goToNextQuestion();
+      } else {
+        goToPrevQuestion();
+      }
+    }
+    setTouchStartX(null);
+    setTouchStartY(null);
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+      if (e.key === 'ArrowLeft') {
+        goToPrevQuestion();
+      } else if (e.key === 'ArrowRight') {
+        goToNextQuestion();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentIndex, questions.length]);
 
   // Timer for Mock Exam
   useEffect(() => {
@@ -190,9 +243,27 @@ export const QuizPlayer: React.FC<QuizPlayerProps> = ({
                   {mode === 'mock' ? t('examMode') : t('practiceMode')}
                 </span>
                 <span className="text-slate-600">•</span>
-                <span className="text-[11px] sm:text-xs text-slate-400 font-mono font-bold">
-                  {currentIndex + 1} / {questions.length}
-                </span>
+                <div className="inline-flex items-center bg-slate-800/90 rounded-md px-1 py-0.5 border border-slate-700/80 space-x-1 text-slate-300 font-mono text-[11px] sm:text-xs font-bold">
+                  <button
+                    onClick={goToPrevQuestion}
+                    disabled={currentIndex === 0}
+                    className="p-0.5 rounded text-slate-400 hover:text-white disabled:opacity-25 active:scale-90 transition"
+                    title={t('prev')}
+                    aria-label="Previous question"
+                  >
+                    <ChevronLeft className="w-3.5 h-3.5" />
+                  </button>
+                  <span className="px-0.5">{currentIndex + 1} / {questions.length}</span>
+                  <button
+                    onClick={goToNextQuestion}
+                    disabled={currentIndex === questions.length - 1}
+                    className="p-0.5 rounded text-slate-400 hover:text-white disabled:opacity-25 active:scale-90 transition"
+                    title={t('next')}
+                    aria-label="Next question"
+                  >
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
               </div>
               <h2 className="text-xs sm:text-sm font-bold text-white tracking-tight truncate max-w-[180px] xs:max-w-xs sm:max-w-md">
                 {title}
@@ -247,8 +318,12 @@ export const QuizPlayer: React.FC<QuizPlayerProps> = ({
         </div>
       </div>
 
-      {/* Main Question Card (Touch-First) */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 sm:p-7 shadow-lg space-y-4 sm:space-y-6">
+      {/* Main Question Card (Touch-First & Swipe Enabled) */}
+      <div
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        className="bg-slate-900 border border-slate-800 rounded-xl p-4 sm:p-7 shadow-lg space-y-4 sm:space-y-6"
+      >
         {/* Question Header & Badges */}
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800/80 pb-3">
           <div className="flex flex-wrap items-center gap-1.5">
@@ -385,16 +460,63 @@ export const QuizPlayer: React.FC<QuizPlayerProps> = ({
             )}
           </div>
         )}
+        {/* Inline Navigation Controls (Directly visible inside question card) */}
+        <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
+          <button
+            onClick={goToPrevQuestion}
+            disabled={currentIndex === 0}
+            className="flex-1 sm:flex-initial flex items-center justify-center space-x-1.5 py-2.5 px-3 sm:px-4 rounded-xl text-xs sm:text-sm font-semibold bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed transition border border-slate-700"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>{t('prev')}</span>
+          </button>
+
+          <button
+            onClick={() => setShowPalette(true)}
+            className="px-3 py-2.5 rounded-xl text-xs font-mono font-bold bg-slate-800/80 hover:bg-slate-700 text-cyan-300 border border-slate-700 flex items-center space-x-1.5 active:scale-95 transition"
+            title={t('questionIndex')}
+          >
+            <Grid className="w-3.5 h-3.5" />
+            <span>{currentIndex + 1} / {questions.length}</span>
+          </button>
+
+          {currentIndex === questions.length - 1 ? (
+            mode === 'mock' ? (
+              <button
+                onClick={() => setShowConfirmSubmit(true)}
+                className="flex-1 sm:flex-initial flex items-center justify-center space-x-1.5 py-2.5 px-4 sm:px-5 rounded-xl text-xs sm:text-sm font-bold bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white shadow-md shadow-emerald-950/40 transition"
+              >
+                <Send className="w-4 h-4" />
+                <span>{t('submit')}</span>
+              </button>
+            ) : (
+              <button
+                onClick={onExit}
+                className="flex-1 sm:flex-initial flex items-center justify-center space-x-1.5 py-2.5 px-4 sm:px-5 rounded-xl text-xs sm:text-sm font-bold bg-cyan-600 hover:bg-cyan-500 active:scale-95 text-white shadow-md shadow-cyan-950/40 transition"
+              >
+                <span>{language === 'zh' ? '完成練習' : 'Finish Practice'}</span>
+              </button>
+            )
+          ) : (
+            <button
+              onClick={goToNextQuestion}
+              className="flex-1 sm:flex-initial flex items-center justify-center space-x-1.5 py-2.5 px-4 sm:px-5 rounded-xl text-xs sm:text-sm font-semibold bg-cyan-600 hover:bg-cyan-500 active:scale-95 text-white shadow-md shadow-cyan-950/40 transition"
+            >
+              <span>{t('next')}</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          )}
+        </div>
       </div>
 
-      {/* Fixed Mobile Bottom Action Bar (Thumb-Accessible) */}
-      <div className="fixed bottom-0 left-0 right-0 z-30 bg-slate-900/98 backdrop-blur border-t border-slate-800 p-2.5 sm:relative sm:p-0 sm:bg-transparent sm:border-0">
-        <div className="max-w-4xl mx-auto flex items-center justify-between gap-2">
+      {/* Fixed Mobile Bottom Action Bar (Thumb-Accessible, High Z-Index, Safe Area Inset) */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-slate-900/98 backdrop-blur-md border-t border-slate-800 px-3 py-2.5 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-2xl sm:relative sm:p-0 sm:bg-transparent sm:border-0 sm:shadow-none">
+        <div className="max-w-4xl mx-auto flex items-center justify-between gap-2.5">
           {/* Previous Button */}
           <button
-            onClick={() => setCurrentIndex((prev) => Math.max(0, prev - 1))}
+            onClick={goToPrevQuestion}
             disabled={currentIndex === 0}
-            className="flex-1 sm:flex-initial flex items-center justify-center space-x-1.5 py-3 sm:py-2 px-4 rounded-xl text-xs sm:text-sm font-semibold bg-slate-800 hover:bg-slate-700 active:bg-slate-750 text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition border border-slate-700"
+            className="flex-1 sm:flex-initial flex items-center justify-center space-x-1.5 py-3 sm:py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold bg-slate-800 hover:bg-slate-750 active:scale-95 text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed transition border border-slate-700 min-h-[44px]"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>{t('prev')}</span>
@@ -403,9 +525,9 @@ export const QuizPlayer: React.FC<QuizPlayerProps> = ({
           {/* Center Mobile Palette Button */}
           <button
             onClick={() => setShowPalette(true)}
-            className="sm:hidden flex items-center justify-center space-x-1 py-3 px-3 rounded-xl text-xs font-mono font-bold bg-slate-800 text-cyan-300 border border-slate-700"
+            className="flex items-center justify-center space-x-1 py-3 px-3.5 rounded-xl text-xs font-mono font-bold bg-slate-800/90 text-cyan-300 border border-slate-700 hover:bg-slate-700 active:scale-95 min-h-[44px]"
           >
-            <Grid className="w-3.5 h-3.5" />
+            <Grid className="w-4 h-4 text-cyan-400" />
             <span>{currentIndex + 1}/{questions.length}</span>
           </button>
 
@@ -414,7 +536,7 @@ export const QuizPlayer: React.FC<QuizPlayerProps> = ({
             mode === 'mock' ? (
               <button
                 onClick={() => setShowConfirmSubmit(true)}
-                className="flex-1 sm:flex-initial flex items-center justify-center space-x-1.5 py-3 sm:py-2 px-5 rounded-xl text-xs sm:text-sm font-bold bg-emerald-600 hover:bg-emerald-500 active:scale-98 text-white shadow-md shadow-emerald-950/40 transition"
+                className="flex-1 sm:flex-initial flex items-center justify-center space-x-1.5 py-3 sm:py-2.5 px-5 rounded-xl text-xs sm:text-sm font-bold bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white shadow-md shadow-emerald-950/40 transition min-h-[44px]"
               >
                 <Send className="w-4 h-4" />
                 <span>{t('submit')}</span>
@@ -422,15 +544,15 @@ export const QuizPlayer: React.FC<QuizPlayerProps> = ({
             ) : (
               <button
                 onClick={onExit}
-                className="flex-1 sm:flex-initial flex items-center justify-center space-x-1.5 py-3 sm:py-2 px-5 rounded-xl text-xs sm:text-sm font-bold bg-cyan-600 hover:bg-cyan-500 active:scale-98 text-white shadow-md shadow-cyan-950/40 transition"
+                className="flex-1 sm:flex-initial flex items-center justify-center space-x-1.5 py-3 sm:py-2.5 px-5 rounded-xl text-xs sm:text-sm font-bold bg-cyan-600 hover:bg-cyan-500 active:scale-95 text-white shadow-md shadow-cyan-950/40 transition min-h-[44px]"
               >
                 <span>{language === 'zh' ? '完成練習' : 'Finish Practice'}</span>
               </button>
             )
           ) : (
             <button
-              onClick={() => setCurrentIndex((prev) => Math.min(questions.length - 1, prev + 1))}
-              className="flex-1 sm:flex-initial flex items-center justify-center space-x-1.5 py-3 sm:py-2 px-5 rounded-xl text-xs sm:text-sm font-semibold bg-cyan-600 hover:bg-cyan-500 active:bg-cyan-650 active:scale-98 text-white shadow-md shadow-cyan-950/40 transition"
+              onClick={goToNextQuestion}
+              className="flex-1 sm:flex-initial flex items-center justify-center space-x-1.5 py-3 sm:py-2.5 px-5 rounded-xl text-xs sm:text-sm font-bold bg-cyan-600 hover:bg-cyan-500 active:scale-95 text-white shadow-md shadow-cyan-950/40 transition min-h-[44px]"
             >
               <span>{t('next')}</span>
               <ArrowRight className="w-4 h-4" />
