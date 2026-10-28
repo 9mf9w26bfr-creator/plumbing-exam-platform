@@ -28,7 +28,13 @@ interface QuizPlayerProps {
   mode: 'practice' | 'mock';
   targetType: 'chapter' | 'unit' | 'mock';
   targetId: string | number;
+  subTopicId?: string;
   initialTimeMinutes?: number;
+  initialIndex?: number;
+  initialSelectedAnswers?: Record<string, string>;
+  initialShowExplanation?: Record<string, boolean>;
+  initialFlagged?: Record<string, boolean>;
+  initialTimeLeft?: number;
   onExit: () => void;
   onCompleteMock?: (result: {
     total: number;
@@ -42,24 +48,76 @@ interface QuizPlayerProps {
 export const QuizPlayer: React.FC<QuizPlayerProps> = ({
   questions,
   title,
+  subtitle,
   mode,
   targetType,
   targetId,
+  subTopicId,
   initialTimeMinutes = 20,
+  initialIndex = 0,
+  initialSelectedAnswers,
+  initialShowExplanation,
+  initialFlagged,
+  initialTimeLeft,
   onExit,
   onCompleteMock,
 }) => {
   const { language, toggleLanguage, t } = useLanguage();
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({});
-  const [showExplanation, setShowExplanation] = useState<Record<string, boolean>>({});
-  const [flagged, setFlagged] = useState<Record<string, boolean>>({});
-  const [timeLeft, setTimeLeft] = useState(initialTimeMinutes * 60);
+  const sessionKey = `${targetType}_${targetId}${subTopicId ? '_' + subTopicId : ''}`;
+
+  const [currentIndex, setCurrentIndex] = useState(initialIndex);
+  const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>(initialSelectedAnswers || {});
+  const [showExplanation, setShowExplanation] = useState<Record<string, boolean>>(initialShowExplanation || {});
+  const [flagged, setFlagged] = useState<Record<string, boolean>>(initialFlagged || {});
+  const [timeLeft, setTimeLeft] = useState(initialTimeLeft ?? initialTimeMinutes * 60);
   const [showPalette, setShowPalette] = useState(false);
   const [showConfirmSubmit, setShowConfirmSubmit] = useState(false);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [touchStartY, setTouchStartY] = useState<number | null>(null);
+
+  // Helper to persist current quiz session to localStorage for reload / disconnect resume
+  const persistSession = (overrideIndex?: number) => {
+    storage.saveQuizSession({
+      sessionKey,
+      title,
+      subtitle,
+      mode,
+      targetType,
+      targetId,
+      subTopicId,
+      durationMinutes: initialTimeMinutes,
+      timeLeft,
+      currentIndex: overrideIndex !== undefined ? overrideIndex : currentIndex,
+      questions,
+      selectedAnswers,
+      showExplanation,
+      flagged,
+      updatedAt: Date.now(),
+    });
+  };
+
+  // Auto-save whenever index, answers, or flags change
+  useEffect(() => {
+    persistSession();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentIndex, selectedAnswers, showExplanation, flagged]);
+
+  // Window unload, pagehide, and visibilitychange listeners to save immediately on disconnect, refresh, or app backgrounding
+  useEffect(() => {
+    const handleImmediateSave = () => {
+      persistSession();
+    };
+    window.addEventListener('beforeunload', handleImmediateSave);
+    window.addEventListener('pagehide', handleImmediateSave);
+    document.addEventListener('visibilitychange', handleImmediateSave);
+    return () => {
+      window.removeEventListener('beforeunload', handleImmediateSave);
+      window.removeEventListener('pagehide', handleImmediateSave);
+      document.removeEventListener('visibilitychange', handleImmediateSave);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentIndex, selectedAnswers, showExplanation, flagged, timeLeft]);
 
   const goToPrevQuestion = () => {
     if (currentIndex > 0) {
@@ -175,6 +233,16 @@ export const QuizPlayer: React.FC<QuizPlayerProps> = ({
     setFlagged((prev) => ({ ...prev, [qId]: !prev[qId] }));
   };
 
+  const handleFinishPractice = () => {
+    storage.clearQuizSession(sessionKey);
+    onExit();
+  };
+
+  const handleSafeExit = () => {
+    persistSession();
+    onExit();
+  };
+
   const handleFinishExam = () => {
     let score = 0;
     const wrongs: Question[] = [];
@@ -190,6 +258,8 @@ export const QuizPlayer: React.FC<QuizPlayerProps> = ({
         storage.addWrongQuestion(q, ans || 'NONE', targetType, targetId);
       }
     });
+
+    storage.clearQuizSession(sessionKey);
 
     if (onCompleteMock) {
       onCompleteMock({
@@ -231,7 +301,7 @@ export const QuizPlayer: React.FC<QuizPlayerProps> = ({
           {/* Left: Back & Progress */}
           <div className="flex items-center space-x-2 sm:space-x-3 truncate">
             <button
-              onClick={onExit}
+              onClick={handleSafeExit}
               className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 active:scale-90 text-slate-300 transition shrink-0"
               title={t('back')}
             >
@@ -273,6 +343,15 @@ export const QuizPlayer: React.FC<QuizPlayerProps> = ({
 
           {/* Right: Timer & Tools */}
           <div className="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
+            {/* Auto-saved indicator */}
+            <div
+              className="hidden sm:flex items-center space-x-1.5 px-2 py-1 rounded-md bg-slate-800/80 border border-slate-700/60 text-[11px] text-emerald-400 font-mono"
+              title={t('autoSavedTip')}
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>{language === 'zh' ? '已自動保存' : 'Auto-saved'}</span>
+            </div>
+
             {/* Mock Timer */}
             {mode === 'mock' && (
               <div
@@ -491,7 +570,7 @@ export const QuizPlayer: React.FC<QuizPlayerProps> = ({
               </button>
             ) : (
               <button
-                onClick={onExit}
+                onClick={handleFinishPractice}
                 className="flex-1 sm:flex-initial flex items-center justify-center space-x-1.5 py-2.5 px-4 sm:px-5 rounded-xl text-xs sm:text-sm font-bold bg-cyan-600 hover:bg-cyan-500 active:scale-95 text-white shadow-md shadow-cyan-950/40 transition"
               >
                 <span>{language === 'zh' ? '完成練習' : 'Finish Practice'}</span>
@@ -543,7 +622,7 @@ export const QuizPlayer: React.FC<QuizPlayerProps> = ({
               </button>
             ) : (
               <button
-                onClick={onExit}
+                onClick={handleFinishPractice}
                 className="flex-1 sm:flex-initial flex items-center justify-center space-x-1.5 py-3 sm:py-2.5 px-5 rounded-xl text-xs sm:text-sm font-bold bg-cyan-600 hover:bg-cyan-500 active:scale-95 text-white shadow-md shadow-cyan-950/40 transition min-h-[44px]"
               >
                 <span>{language === 'zh' ? '完成練習' : 'Finish Practice'}</span>

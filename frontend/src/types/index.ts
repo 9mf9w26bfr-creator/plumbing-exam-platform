@@ -78,3 +78,21 @@ export interface UserProgressStat {
   byChapter: Record<number, { total: number; correct: number }>;
   byUnit: Record<string, { total: number; correct: number }>;
 }
+
+export interface QuizSessionState {
+  sessionKey: string;
+  title: string;
+  subtitle?: string;
+  mode: 'practice' | 'mock';
+  targetType: 'chapter' | 'unit' | 'mock';
+  targetId: string | number;
+  subTopicId?: string;
+  durationMinutes?: number;
+  timeLeft?: number;
+  currentIndex: number;
+  questions: Question[];
+  selectedAnswers: Record<string, string>;
+  showExplanation: Record<string, boolean>;
+  flagged: Record<string, boolean>;
+  updatedAt: number;
+}

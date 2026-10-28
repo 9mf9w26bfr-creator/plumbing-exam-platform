@@ -94,6 +94,38 @@ const translations: Record<string, { zh: string; en: string }> = {
   promoteNext: { zh: '推進入下一階段', en: 'Promote Stage' },
   demoteDraft: { zh: '退回草稿', en: 'Demote to Draft' },
   sourceRequiredNotice: { zh: '注意：進入「技術核實」及「正式發布」必須附帶權威法規/規範出處 (Rule 3)', en: 'Notice: Advancing to Verified or Published requires mandatory standard reference (Rule 3)' },
+
+  // Session recovery & Unfinished test resume
+  resumeTitle: { zh: '發現未完成的測驗進度', en: 'Unfinished Quiz Session Detected' },
+  resumeDesc: { zh: '系統檢測到您之前中途退出或斷線，是否從上次中斷的題目繼續？', en: 'System detected that you previously disconnected or exited. Would you like to resume from where you left off?' },
+  resumeFromQ: { zh: '繼續上次進度', en: 'Resume Previous Session' },
+  startFresh: { zh: '重新開始', en: 'Start Fresh' },
+  resumeBannerTitle: { zh: '未完成的測驗進度', en: 'In-Progress Quiz' },
+  resumeBannerAction: { zh: '點擊繼續做題', en: 'Click to Resume' },
+  discard: { zh: '放棄記錄', en: 'Discard' },
+  inProgress: { zh: '進行中', en: 'In Progress' },
+  autoSavedTip: { zh: '做題進度已即時自動留存，中途退出或斷線可隨時原題繼續', en: 'Progress auto-saved in real-time. Safe to exit or disconnect anytime.' },
+};
+
+const getInitialLanguage = (): Language => {
+  if (typeof window === 'undefined') return 'zh';
+  const saved = localStorage.getItem('plumbing_exam_lang');
+  if (saved === 'en' || saved === 'zh') {
+    return saved;
+  }
+  try {
+    const navLang = (
+      navigator.language ||
+      (navigator.languages && navigator.languages[0]) ||
+      ''
+    ).toLowerCase();
+    if (navLang.startsWith('zh')) {
+      return 'zh';
+    }
+    return 'en';
+  } catch {
+    return 'zh';
+  }
 };
 
 const LanguageContext = createContext<LanguageContextType>({
@@ -107,10 +139,18 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [language, setLanguageState] = useState<Language>('zh');
 
   useEffect(() => {
-    const saved = localStorage.getItem('plumbing_exam_lang');
-    if (saved === 'en' || saved === 'zh') {
-      setLanguageState(saved);
-    }
+    const initial = getInitialLanguage();
+    setLanguageState(initial);
+
+    const handleLangChange = () => {
+      const saved = localStorage.getItem('plumbing_exam_lang');
+      if (!saved) {
+        setLanguageState(getInitialLanguage());
+      }
+    };
+
+    window.addEventListener('languagechange', handleLangChange);
+    return () => window.removeEventListener('languagechange', handleLangChange);
   }, []);
 
   const setLanguage = (lang: Language) => {

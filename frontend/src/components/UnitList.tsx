@@ -1,20 +1,22 @@
 'use client';
 
 import React from 'react';
-import { ExamUnit } from '../types';
+import { ExamUnit, QuizSessionState } from '../types';
 import { useLanguage } from '../context/LanguageContext';
-import { GraduationCap, ArrowRight, ShieldCheck, Cpu, Leaf, Briefcase } from 'lucide-react';
+import { GraduationCap, ArrowRight, ShieldCheck, Cpu, Leaf, Briefcase, RotateCcw } from 'lucide-react';
 
 interface UnitListProps {
   units: ExamUnit[];
   onSelectUnit: (unitId: string) => void;
   loading: boolean;
+  activeSessions?: Record<string, QuizSessionState>;
 }
 
 export const UnitList: React.FC<UnitListProps> = ({
   units,
   onSelectUnit,
   loading,
+  activeSessions,
 }) => {
   const { language, t } = useLanguage();
 
@@ -90,50 +92,79 @@ export const UnitList: React.FC<UnitListProps> = ({
 
       {/* Units Grid (1 col on mobile, 2 on tablet, 3 on desktop) */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-        {units.map((unit) => (
-          <div
-            key={unit.id}
-            className="bg-slate-900/90 border border-slate-800 hover:border-slate-700 rounded-xl p-4 sm:p-5 flex flex-col justify-between transition-all duration-200 hover:shadow-lg hover:shadow-cyan-950/20 group"
-          >
-            <div>
-              <div className="flex items-center justify-between mb-2 sm:mb-3">
-                <span className="text-[11px] font-mono font-semibold px-2 py-0.5 rounded-md bg-slate-800 text-cyan-300 border border-slate-700">
-                  {unit.id}
-                </span>
-                <span className={`text-[10px] font-mono px-2 py-0.5 rounded border flex items-center space-x-1 ${getCategoryBadgeClass(unit.category)}`}>
-                  {getCategoryIcon(unit.category)}
-                  <span>{unit.category}</span>
-                </span>
+        {units.map((unit) => {
+          const session = activeSessions ? activeSessions['unit_' + unit.id] : undefined;
+
+          return (
+            <div
+              key={unit.id}
+              className={`bg-slate-900/90 border rounded-xl p-4 sm:p-5 flex flex-col justify-between transition-all duration-200 hover:shadow-lg group ${
+                session
+                  ? 'border-amber-500/50 hover:border-amber-400/80 shadow-amber-950/20'
+                  : 'border-slate-800 hover:border-slate-700 hover:shadow-cyan-950/20'
+              }`}
+            >
+              <div>
+                <div className="flex items-center justify-between mb-2 sm:mb-3">
+                  <div className="flex items-center space-x-1.5">
+                    <span className="text-[11px] font-mono font-semibold px-2 py-0.5 rounded-md bg-slate-800 text-cyan-300 border border-slate-700">
+                      {unit.id}
+                    </span>
+                    {session && (
+                      <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800 flex items-center space-x-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+                        <span>Q{session.currentIndex + 1}/{session.questions.length}</span>
+                      </span>
+                    )}
+                  </div>
+                  <span className={`text-[10px] font-mono px-2 py-0.5 rounded border flex items-center space-x-1 ${getCategoryBadgeClass(unit.category)}`}>
+                    {getCategoryIcon(unit.category)}
+                    <span>{unit.category}</span>
+                  </span>
+                </div>
+
+                <h2 className="text-sm sm:text-base font-bold text-white group-hover:text-cyan-300 transition-colors">
+                  {unit.title}
+                </h2>
+
+                <p className="text-xs text-slate-400 mt-1.5 line-clamp-2">
+                  {unit.id === 'Unit_ENV'
+                    ? (language === 'zh' ? '經大綱核實之節能環保複習分類，非獨立 L2 考單元' : 'Syllabus-verified energy conservation & eco-revision category')
+                    : (language === 'zh' ? 'C&G 6035 / 8202 核心評估單元模塊' : 'Standard C&G 6035/8202 core assessment module')}
+                </p>
               </div>
 
-              <h2 className="text-sm sm:text-base font-bold text-white group-hover:text-cyan-300 transition-colors">
-                {unit.title}
-              </h2>
-
-              <p className="text-xs text-slate-400 mt-1.5 line-clamp-2">
-                {unit.id === 'Unit_ENV'
-                  ? (language === 'zh' ? '經大綱核實之節能環保複習分類，非獨立 L2 考單元' : 'Syllabus-verified energy conservation & eco-revision category')
-                  : (language === 'zh' ? 'C&G 6035 / 8202 核心評估單元模塊' : 'Standard C&G 6035/8202 core assessment module')}
-              </p>
-            </div>
-
-            <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between gap-2">
-              <span className="text-[11px] text-slate-400">
-                <span className="text-cyan-400 font-bold mr-1">
-                  {unit.question_count || 0}
+              <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between gap-2">
+                <span className="text-[11px] text-slate-400">
+                  <span className="text-cyan-400 font-bold mr-1">
+                    {unit.question_count || 0}
+                  </span>
+                  {t('questionsAvailable')}
                 </span>
-                {t('questionsAvailable')}
-              </span>
-              <button
-                onClick={() => onSelectUnit(unit.id)}
-                className="flex items-center space-x-1.5 py-2 px-3.5 bg-cyan-600 hover:bg-cyan-500 active:bg-cyan-650 active:scale-95 text-white rounded-lg text-xs font-bold transition shadow-sm"
-              >
-                <span>{t('startPractice')}</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
+                <button
+                  onClick={() => onSelectUnit(unit.id)}
+                  className={`flex items-center space-x-1.5 py-2 px-3.5 rounded-lg text-xs font-bold transition shadow-sm active:scale-95 border ${
+                    session
+                      ? 'bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-slate-950 border-amber-500'
+                      : 'bg-cyan-600 hover:bg-cyan-500 text-white border-cyan-500'
+                  }`}
+                >
+                  {session ? (
+                    <>
+                      <RotateCcw className="w-3.5 h-3.5" />
+                      <span>{language === 'zh' ? `從第 ${session.currentIndex + 1} 題繼續` : `Resume (Q${session.currentIndex + 1})`}</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>{t('startPractice')}</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
