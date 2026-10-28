@@ -13,14 +13,14 @@ def seed_database():
     db = SessionLocal()
 
     try:
-        # Check if already seeded with at least 50 questions
-        if db.query(Question).count() >= 500:
+        # Check if already seeded with comprehensive question bank
+        if db.query(Question).count() >= 820:
             print("Database already contains comprehensive question bank, skipping seeding.")
             return
 
         # If has old small data, clear to upgrade
         if db.query(Question).count() > 0:
-            print("Upgrading database to comprehensive 550-question bank...")
+            print("Upgrading database to comprehensive 823-question bank...")
             db.query(QuestionChapterMapping).delete()
             db.query(QuestionUnitMapping).delete()
             db.query(Question).delete()

@@ -1,0 +1,446 @@
+# Chapter 4: Planning and supervision (60 Questions)
+from .utils import make_q
+
+def get_questions():
+    questions = []
+    
+    data = [
+        # 4.1 Material Estimating, Architectural Scales & Contract Documents
+        ("4.1",
+         "On an architect's floor plan drawing drawn to a scale of 1:50, what real-world distance is represented by a measured length of 30 mm on the paper?",
+         "在建築師繪製的比例尺為 1:50 的平面圖紙上，用直尺量取的 30 mm 圖面長度代表現場實際物理距離是多少？",
+         {"A": "150 mm (0.15 m)", "B": "1,500 mm (1.5 m)", "C": "3,000 mm (3.0 m)", "D": "15,000 mm (15 m)"},
+         {"A": "150 mm (0.15 米)", "B": "1,500 mm (1.5 米)", "C": "3,000 mm (3.0 米)", "D": "15,000 mm (15 米)"},
+         "B", "At 1:50 scale, 1 mm on paper represents 50 mm in reality. Real distance = 30 mm × 50 = 1500 mm = 1.5 meters.", "比例尺 1:50 表示圖紙上 1 毫米代表現場 50 毫米。實際長度 = 30 × 50 = 1500 mm = 1.5 米。", "BS 1192 / BS EN ISO 5457; C&G Unit 209"),
+
+        ("4.1",
+         "On a site location block plan drawn to a scale of 1:500, a proposed underground water service trench measures 60 mm on the drawing. What is the real trench length?",
+         "在比例尺為 1:500 的總平面分區規劃圖上，設計的一條地下進戶供水管溝在圖紙上長度為 60 mm。現場管溝的實際開挖長度是多少米？",
+         {"A": "6 meters", "B": "30 meters", "C": "60 meters", "D": "300 meters"},
+         {"A": "6 米", "B": "30 米 (60 mm × 500 = 30,000 mm)", "C": "60 米", "D": "300 米"},
+         "B", "At 1:500 scale: Real length = 60 mm × 500 = 30,000 mm = 30 meters.", "計算：60 mm × 500 = 30,000 mm = 30 米。總平面圖常用 1:500 或 1:1250 比例尺標記外線市政給排水管網走向。", "BS EN ISO 5455 Technical drawings - Scales; C&G Unit 209"),
+
+        ("4.1",
+         "What is the fundamental legal difference between an 'Estimate' and a 'Quotation' provided to a client for plumbing work?",
+         "水暖承包商向客戶出具的工程「估價單 (Estimate)」與「正式報價單 (Quotation)」之間，最根本的法律約束力區別是什麼？",
+         {"A": "An estimate is legally binding, whereas a quotation is an informal guess", "B": "A quotation is a legally binding fixed price offer that cannot be increased once accepted, whereas an estimate is merely an approximate guide subject to change", "C": "An estimate requires VAT, a quotation does not", "D": "There is no legal difference between them in the UK"},
+         {"A": "估價單具備法律約束力，而報價單只是非正式猜測", "B": "報價單 (Quotation) 屬於具備法定約束力的確定性要約，一旦客戶確認簽字即鎖定合同總價；而估價單 (Estimate) 僅為估算參考，最終結算隨實際工料浮動", "C": "估價單必須繳納增值稅，報價單免稅", "D": "在英國合同法中兩者具有完全等同的法律效力"},
+         "B", "A quotation forms a binding contract once accepted by the customer. An estimate is only an educated approximation that may fluctuate.", "英國合同法規定：Quotation 經客戶接受後即構成固定價格合同，承包商無權因施工困難擅自加價；Estimate 僅為預估指導價，允許按實際發生工料多退少補。", "Consumer Rights Act 2015; C&G Unit 209"),
+
+        ("4.1",
+         "What project management visual planning tool uses horizontal time bars to illustrate project task schedules, start and end dates, and dependencies?",
+         "哪一種工程項目管理視覺化進度工具，利用橫向時間色塊條直觀展示各分項工程的起止日期、關鍵進度節點及前後工序邏輯依賴關係？",
+         {"A": "Bar chart (Gantt Chart)", "B": "Pie chart", "C": "Isometric sketch", "D": "Circuit wiring schematic"},
+         {"A": "甘特圖 / 橫道進度圖 (Gantt Chart)", "B": "圓形餅狀圖", "C": "軸測等軸草圖", "D": "電氣接線原理圖"},
+         "A", "A Gantt chart maps tasks against a timeline, showing concurrent work packages, task durations, and critical path milestones.", "甘特圖（Gantt Chart）將施工活動排布在橫向日曆時間軸上，能清晰標識水暖一期打底（First fix）、二期裝配（Second fix）與瓦工木工交叉施工節點。", "Project Management Principles; C&G Unit 209"),
+
+        ("4.1",
+         "In project management scheduling, what does the term 'Critical Path' define?",
+         "在施工進度網絡計劃中，「關鍵路徑 (Critical Path)」代表的是什麼？",
+         {"A": "The cheapest route to transport copper pipe to site", "B": "The sequence of dependent tasks that represents the longest overall duration, where any delay directly extends the final project completion date", "C": "The emergency fire exit route", "D": "The shortest underground pipe trench"},
+         {"A": "運輸銅管到現場費用最低的行車路線", "B": "由各關聯工序構成的總耗時最長的作業鏈條，該路徑上任何一個環節發生延誤，都會直接導致整個工程最終竣工日期拖延", "C": "施工現場突發火災緊急疏散路徑", "D": "地下埋設管線距離最短的走線"},
+         "B", "The critical path consists of zero-float activities. Any delay to critical path tasks directly pushes back the project handover deadline.", "關鍵路徑上的工序沒有任何自由時差（Zero float）。例如浴室打底管路未試壓驗收，瓦工就無法貼磚，這類工序的拖延會連鎖反應推遲整體交付期。", "Critical Path Method (CPM); C&G Unit 209"),
+
+        ("4.1",
+         "What contract document provides an itemized list of all materials, parts, components, and labor operations required for a large plumbing installation?",
+         "在大型水暖與機電工程招標及施工中，詳細列明所需所有材料規格、管配件數量及各項安裝工序工時的清單文件被稱作什麼？",
+         {"A": "Bill of Quantities (BoQ) / Schedule of Work", "B": "Waste Transfer Note", "C": "Safety Data Sheet", "D": "CSCS card"},
+         {"A": "工程量清單 (Bill of Quantities - BoQ) / 工程進度分項明細表", "B": "廢物轉移聯單", "C": "化學品安全技術說明書", "D": "現場施工工人卡"},
+         "A", "A Bill of Quantities (BoQ) itemizes materials, fixtures, and labor operations, allowing accurate contractor tendering and cost control.", "工程量清單（BoQ）由工料測量師（QS）根據圖紙精確核算編制，統一各投標方的報價基準，也是後續變更簽證與進度款支付的審計依據。", "RICS Standard Method of Measurement; C&G Unit 209"),
+
+        ("4.1",
+         "When taking delivery of materials from a merchant on site, what document must the plumber check and sign to verify receipt of goods?",
+         "水暖工在施工現場接收建材供應商送達的管道和衛浴貨物時，必須仔細核對並當場簽字驗收的法定憑證是什麼？",
+         {"A": "Architectural floor elevation", "B": "Delivery Note / Goods Received Note", "C": "Energy Performance Certificate", "D": "Prohibition Notice"},
+         {"A": "建築立面展開圖", "B": "送貨簽收單 (Delivery Note) / 貨物接收單", "C": "房屋能效等級證書", "D": "現場停工禁令"},
+         "B", "The operative must check goods against the Delivery Note for damage or shortages before signing, noting any discrepancies immediately.", "簽字前必須對照送貨單逐一清點規格、箱數並檢查外觀有無磕碰缺損；一旦無異議簽署，若有破損或缺件供應商概不認賬。", "Materials Handling & Logistics; C&G Unit 209"),
+
+        ("4.1",
+         "What visual symbol standard on British plumbing and architectural drawings indicates a standard Gate Valve?",
+         "在英國建築給排水施工圖紙中，代表常規「閘閥 (Gate Valve)」的標準繪圖符號通常是什麼外觀？",
+         {"A": "A solid black circle", "B": "Two opposing triangles meeting at their vertices (bow-tie symbol) with a vertical line through the centre", "C": "A square with a cross inside", "D": "A lightning bolt"},
+         {"A": "一個實心黑圓圈", "B": "兩個頂點相對的三角形（領結蝴蝶結圖形），且頂點交匯處帶有一條垂直閥桿線", "C": "帶十字交叉的實心正方形", "D": "閃電符號"},
+         "B", "Standard valve symbology (BS 1553-1) uses two opposing triangles (a bow tie); a gate valve has a central line or flat bar.", "BS 1553-1 及 BS EN ISO 10628 規定：雙三角形相對代表閥門本體，中央帶垂直直線象徵閥板升降，直觀指示全通徑閘閥。", "BS 1553-1 Graphical symbols for general engineering; C&G Unit 209"),
+
+        # 4.2 Trade Coordination, Joist Notching & Site Rules
+        ("4.2",
+         "Under Building Regulations Approved Document A (Structure) and TRADA guidelines, where on a timber floor joist is notching permitted?",
+         "根據英國建築法規 Approved Document A（結構安全）及 TRADA 木結構規範，在樓板實木承重托樑上開鑿管槽（Notch）只允許在樑的哪個特定區間？",
+         {"A": "Anywhere along the bottom edge", "B": "Only on the top edge, within a zone between 0.07 and 0.25 of the total clear span from either supporting wall", "C": "Directly in the exact middle of the joist span", "D": "Within 50 mm of the supporting joist end"},
+         {"A": "樑底邊緣的任何任意位置", "B": "僅限於樑的頂部邊緣，且開槽位置必須位於距離任一側支承端牆淨跨度 0.07 至 0.25（7% 至 25%）的特定區間之內", "C": "剛好在托樑正中央跨中位置", "D": "距離支承牆端部 50 mm 以內"},
+         "B", "Notches must only be cut in the top edge between 0.07 and 0.25 of the clear span, where bending tension stresses are negligible.", "托樑下邊緣承受巨大拉應力，開槽必引發脆斷！法規強制要求開槽只能在頂部受壓區，且嚴格限制在淨跨度的 0.07 到 0.25 區間內。", "Building Regulations Approved Document A Section 2; TRADA"),
+
+        ("4.2",
+         "What is the maximum permissible depth of a notch cut into the top of a timber floor joist under Approved Document A?",
+         "根據 Approved Document A 規範，在木托樑頂部開鑿管道切槽時，切槽深度的最大法定極限是多少？",
+         {"A": "0.125 (1/8) of the joist depth", "B": "0.25 (1/4) of the joist depth", "C": "0.5 (1/2) of the joist depth", "D": "50 mm regardless of joist size"},
+         {"A": "托樑自身截面高度的 0.125（即最大不得超過樑高的 1/8）", "B": "托樑截面高度的 0.25 (1/4)", "C": "托樑截面高度的 0.5 (1/2)", "D": "無論樑多大多小一律可開 50 mm 深"},
+         "A", "The maximum notch depth is 0.125 (1/8) times the joist depth (e.g. max 25mm notch on a 200mm deep joist) to preserve structural integrity.", "開槽深度極限為托樑高度的 1/8（0.125）。例如 200mm 高的托樑，開槽深度絕對不能超過 25mm，否則嚴重破壞樑的抗彎承載截面。", "Approved Document A Section 2.B; NHBC Standards 6.4"),
+
+        ("4.2",
+         "Where must circular holes for plumbing pipes be drilled through a timber floor joist under Approved Document A?",
+         "根據建築法規 Approved Document A，在實木地板托樑上打圓孔穿設水管時，鑽孔的中心線必須位於樑截面的什麼位置？",
+         {"A": "Along the bottom tensile edge", "B": "On the neutral axis (centreline) of the joist, between 0.25 and 0.4 of the clear span from either end", "C": "Directly at the joist top edge", "D": "At 0.05 of the span from the wall"},
+         {"A": "緊貼托樑底部受拉邊緣", "B": "位於托樑高度方向的中性軸（幾何中心線）上，且開孔位置必須處於距離支撐端 0.25 至 0.40（25% 至 40%）的跨度區間之內", "C": "緊貼托樑頂部上邊緣", "D": "距牆面 0.05 跨度處"},
+         "B", "Holes must be drilled on the neutral centreline (where bending stress is zero) between 0.25 and 0.4 of the span from the support.", "中性軸處彎曲正應力為零，鑽孔破壞最小。鑽孔中心必須在樑高中心線上，且水平位置須在支點 0.25 到 0.4 跨長之間（避開高剪力端部與高彎矩跨中）。", "Approved Document A Section 2; TRADA Guidelines"),
+
+        ("4.2",
+         "What is the maximum permissible diameter of a hole drilled through a timber floor joist under Approved Document A?",
+         "根據 Approved Document A 規範，在木托樑中性軸上鑽設的圓孔，其最大允許孔徑不得超過托樑高度的幾分之幾？",
+         {"A": "0.125 (1/8) of joist depth", "B": "0.25 (1/4) of joist depth", "C": "0.5 (1/2) of joist depth", "D": "75 mm regardless of joist size"},
+         {"A": "托樑截面高度的 0.125 (1/8)", "B": "托樑截面高度的 0.25 (即不超過樑高的 1/4)", "C": "托樑截面高度的 0.5 (1/2)", "D": "無論樑深多大一律可打 75 mm 大孔"},
+         "B", "Hole diameter must not exceed 0.25 (1/4) times the joist depth (e.g. max 50mm diameter hole in a 200mm deep joist).", "鑽孔直徑上限為托樑截面高度的 1/4（0.25）。例如 200mm 高托樑最大鑽孔直徑為 50mm；且相鄰兩孔邊緣間距至少保留 3 倍孔徑寬度。", "Approved Document A; NHBC Technical Standards"),
+
+        ("4.2",
+         "Under BS 7671 and plumbing best practice, what minimum separation distance should be maintained between hot water pipes and electrical wiring cables?",
+         "根據英國電氣規範 BS 7671 及水暖協同工藝，熱水管道與電氣電纜平行敷設時，兩者之間建議保持的最小淨空間隔距離是多少？",
+         {"A": "0 mm (strapped together with cable ties)", "B": "At least 25 mm (preferably crossing at right angles or separated by 100 mm if parallel)", "C": "500 mm", "D": "1,000 mm"},
+         {"A": "0 mm (用尼龍紮帶將水管與電線死死捆在一起)", "B": "至少 25 mm 淨距（且交叉時呈 90 度直角跨越，若平行走線推薦保持 100 mm 以上避讓間距）", "C": "500 mm", "D": "1,000 mm"},
+         "B", "BS 7671 Regulation 528.3 requires electrical cables to be protected from heat emitted by hot pipes, maintaining at least 25mm clearance.", "熱水管散發的高溫會使電線 PVC 絕緣皮軟化、載流量降額並加速線皮脆化老化。兩者必須物理隔開至少 25mm，嚴禁將電線直接綁紮在熱水管上。", "BS 7671:2018 Regulation 528.3; On-Site Guide"),
+
+        ("4.2",
+         "When plumbing and electrical services cross each other in a service void, how should the pipes be installed relative to electrical cables?",
+         "當水暖管線與電氣線路在吊頂或木地板管井內發生上下立體交叉時，兩者的相對高程位置應當如何科學佈置？",
+         {"A": "Pipes must always be placed beneath electrical cables", "B": "Pipes must always be placed directly above bare electrical cables", "C": "Pipes should wrap around the cable tightly", "D": "Cables should be threaded inside the water pipe"},
+         {"A": "水管必須始終敷設在電氣電纜的下方（電上水下原則）", "B": "水管必須始終架設在電線的上方正頂部", "C": "水管應當螺旋纏繞在電線外壁", "D": "電線應直接穿入自來水管內部"},
+         "A", "Installing pipes below electrical cables ensures that in the event of pipe leakage or condensation dripping, water will not drip directly onto live electrical wiring.", "恪守「水下電上」工程黃金準則。水管置於下方，能杜絕水管冷凝結露滴水或接口微滲時水流直接淋在電線接頭盒上引發短路起火。", "Building Services Coordination Guide; C&G Unit 209"),
+
+        ("4.2",
+         "In construction trade sequencing, what plumbing work is performed during 'First Fix'?",
+         "在現代建築施工工序中，水暖工程的「一期打底施工 (First Fix)」通常涵蓋哪些作業內容？",
+         {"A": "Installing polished chrome taps, shower doors, and toilet seats", "B": "Running and clipping all concealed pipework, waste runs, heating circuits, and installing soil stacks before walls and floors are closed up", "C": "Polishing the customer floor tiles", "D": "Hanging pictures on bedroom walls"},
+         {"A": "安裝光亮鍍鉻水龍頭、淋浴玻璃隔斷門及馬桶蓋板", "B": "在牆體封石膏板和地面鋪木地板之前，敷設並固定所有隱蔽冷熱水管、排水支管、供暖管網及排污立管", "C": "為業主的客廳地磚打蠟拋光", "D": "在臥室牆上懸掛裝飾畫"},
+         "B", "First fix encompasses all behind-the-wall infrastructure pipework, pre-testing, and bracket installation prior to plastering and flooring.", "一期工程（First Fix）即隱蔽工程打底：在木工吊頂、泥水抹灰前，將所有埋牆、夾層穿管佈置到位並完成打壓試漏確認，等待後續工種封堵。", "Construction Sequencing Manual; C&G Unit 209"),
+
+        ("4.2",
+         "What plumbing activity represents 'Second Fix'?",
+         "在建築裝修工序劃分中，屬於水暖「二期安裝工程 (Second Fix)」的施工項目是什麼？",
+         {"A": "Chasing masonry walls with angle grinders", "B": "Mounting and connecting sanitary appliances (basins, WCs, baths), radiator panels, boiler commissioning, and final testing", "C": "Pouring concrete sub-floor foundations", "D": "Erecting structural roof trusses"},
+         {"A": "使用角磨機在磚牆上開鑿管槽", "B": "在牆面油漆瓷磚竣工後，精細安裝並接駁衛生潔具（台盆、馬桶、浴缸）、掛裝散熱器暖氣片、鍋爐點火調試及整體驗收", "C": "澆築混凝土基層地基", "D": "吊裝屋頂木桁架"},
+         "B", "Second fix takes place after decorating and tiling: mounting sanitaryware, connecting chrome fittings, commissioning boilers, and handover.", "二期工程（Second Fix）即表面設備就位：在磁磚貼完、牆漆刷好後進場，掛裝潔具龍頭暖氣片，接駁調試並確保外表零刮花，交付業主使用。", "C&G 6035 Unit 209 Textbook Ch 4"),
+
+        ("4.2",
+         "What is a 'Snagging List' compiled prior to formal project handover?",
+         "在工程竣工向客戶或業主代表進行正式交付驗收前，各方編制的「問題清單 (Snagging List / Punch List)」是指什麼？",
+         {"A": "A list of plumber tool purchase receipts", "B": "A comprehensive defect list identifying minor cosmetic blemishes, leaks, unclipped pipes, or functional faults requiring rectification", "C": "A site lottery ticket", "D": "An invoice for tea and biscuits"},
+         {"A": "水暖工工具採購發票明細", "B": "詳細記錄工程中存在的各類微小瑕疵、輕微滲漏、管卡未鎖緊或功能調試不到位的缺陷整改清單", "C": "現場工友彩票合買清單", "D": "現場下午茶點心報銷憑證"},
+         "B", "A snagging list records defects, omissions, and substandard workmanship identified during pre-handover joint inspections for prompt contractor rectification.", "驗收缺陷清單（Snag List）由監理或業主在預驗收時出具，列出待修補項（如龍頭手柄微晃、閥門標牌遺漏、保溫棉縫隙），整改合格後方可簽發竣工證。", "JCT Standard Building Contract; C&G Unit 209"),
+
+        ("4.2",
+         "Under the UK Data Protection Act 2018 (GDPR), how must a plumbing contractor handle a customer's personal contact details and residential address?",
+         "根據英國《2018年數據保護法》(GDPR)，水暖承包商對所持有的客戶個人聯繫方式及住宅地址信息，必須履行何種法定義務？",
+         {"A": "Publish all customer details on public social media forums", "B": "Store data securely, process it lawfully for legitimate business purposes only, and never disclose or sell it without explicit consent", "C": "Sell the contact list to spam call centres", "D": "Pin the list to the outside site fence"},
+         {"A": "將所有客戶個人信息直接發佈在公開的社交媒體論壇上", "B": "安全加密儲存數據，僅在合法業務目的範圍內合規處理，未經客戶明確授權嚴禁向任何第三方洩露或轉賣", "C": "將客戶名單打包販賣給垃圾推銷電話公司", "D": "將客戶清單張貼在工地外圍圍欄上公示"},
+         "B", "GDPR principles mandate confidentiality, lawful processing, purpose limitation, and secure storage of all personally identifiable customer information.", "GDPR 嚴格規定個人隱私數據保護原則：合法透明、目的限制、最小化採集及高度安全防護。洩露客戶姓名住址將面臨信息專員辦公室 (ICO) 巨額處罰。", "Data Protection Act 2018 / UK GDPR; C&G Unit 209"),
+
+        ("4.2",
+         "How should an operative address a customer who is angry and complaining aggressively about a leak following recent boiler installation?",
+         "當業主因新裝鍋爐出現微量滲水而極度憤怒、情緒激動地向水暖工大聲投訴時，專業的溝通與服務態度應當如何？",
+         {"A": "Shout back defensively and blame the customer", "B": "Listen actively without interruption, acknowledge their frustration empathetically, inspect the issue calmly, and offer an immediate corrective action plan", "C": "Pack up tools and walk off site permanently", "D": "Tell them to call the police"},
+         {"A": "以更大的聲音大吼反駁，並指責是業主自己操作不當", "B": "保持冷靜與耐心，不打斷其傾訴，以同理心理解其焦慮，立即親自檢查漏水點並給出切實迅速的修復行動方案", "C": "一聲不吭收拾工具箱徹底摔門離場", "D": "建議業主直接撥打報警電話"},
+         "B", "Professional customer service de-escalates conflict through active listening, sincere empathy, constructive problem solving, and prompt rectification.", "優秀的工程人員始終展現高度職業素養：冷靜傾聽消解客戶對立情緒，迅速排查故障源頭，承擔責任並立即修復，維護企業信譽。", "Customer Service Standards in Construction; C&G Unit 209"),
+
+        ("4.2",
+         "What document should be provided to the homeowner upon commissioning a new central heating boiler, containing operating instructions, benchmark checklist, and warranty registration?",
+         "在為業主調試交付一套全新中央供暖鍋爐時，依法必須隨機移交給業主的成套運維文件是什麼？",
+         {"A": "The manufacturer's User Instructions and completed Benchmark Commissioning Checklist", "B": "A scrap of paper with the plumber's mobile number", "C": "The merchant's trade price catalogue", "D": "The local council tax bill"},
+         {"A": "製造商原廠用戶操作使用說明書，以及填寫完整的「Benchmark 供暖系統調試檢驗記錄表」與質保卡", "B": "寫有安裝工個人手機號的一張碎紙條", "C": "建材批發商的內部進貨底價畫冊", "D": "當地市政物業稅賬單"},
+         "A", "The Benchmark scheme requires the installer to complete the commissioning checklist and hand over user instructions for Building Regs Part L compliance.", "Benchmark 調試清單是英國供暖行業法定的竣工合規憑證，詳細記錄進氣壓、煙氣分析讀數及水質保護劑添加量，是啟動廠家保修的先決條件。", "Building Regulations Approved Document L1; Benchmark Scheme")
+    ]
+
+    for sub_id, stem_en, stem_zh, opts_en, opts_zh, ans, exp_en, exp_zh, ref in data:
+        questions.append(make_q(4, sub_id, ["Unit_209"], stem_en, stem_zh, opts_en, opts_zh, ans, exp_en, exp_zh, ref))
+
+    # Add 40 additional realistic planning, estimating, site management, notching, and coordination questions to reach 60
+    extra_c4 = [
+        ("4.1",
+         "On an architect's detail drawing drawn at 1:20 scale, a shower enclosure measures 45 mm wide on the drawing. What is its real width?",
+         "在比例尺為 1:20 的衛生間局部節點大樣圖上，淋浴房底座圖面寬度量測為 45 mm。其現場實際物理寬度是多少？",
+         {"A": "450 mm", "B": "900 mm (0.9 m)", "C": "1,200 mm", "D": "2,000 mm"},
+         {"A": "450 mm", "B": "900 mm (0.9 米)", "C": "1,200 mm", "D": "2,000 mm"},
+         "B", "At 1:20 scale: Real dimension = 45 mm × 20 = 900 mm (0.9 meters), a standard quadrant shower tray size.", "比例尺 1:20：實際尺寸 = 45 mm × 20 = 900 mm = 0.9 米，剛好是標準 900×900 規格淋浴底盆的尺寸。", "BS EN ISO 5455; C&G Unit 209"),
+
+        ("4.1",
+         "On a drawing drawn at 1:100 scale, a horizontal central heating main measures 125 mm. What is the real length of the pipe run?",
+         "在一張比例尺為 1:100 的供暖管線總平面圖上，一條供暖主幹管長度量測為 125 mm。該管段的實際敷設長度是多少？",
+         {"A": "1.25 meters", "B": "12.5 meters", "C": "125 meters", "D": "1,250 meters"},
+         {"A": "1.25 米", "B": "12.5 米", "C": "125 米", "D": "1,250 米"},
+         "B", "At 1:100 scale: Real length = 125 mm × 100 = 12,500 mm = 12.5 meters.", "計算：125 mm × 100 = 12,500 mm = 12.5 米。1:100 是建築樓層總平面圖最通用的基準比例尺。", "BS EN ISO 5455; C&G Unit 209"),
+
+        ("4.1",
+         "When estimating the quantity of 15mm copper tube required for a new installation, what percentage is conventionally added to cover cutting waste and offcuts?",
+         "在編制新裝工程材料預算、統計 15mm 銅管採購總量時，行業慣例通常在淨量基礎上額外上浮百分之幾的切削損耗餘量？",
+         {"A": "0% (exact net length only)", "B": "10% to 15% wastage allowance", "C": "50%", "D": "100%"},
+         {"A": "0% (僅按圖紙淨尺寸死卡下單)", "B": "10% 至 15% 的常規施工損耗上浮率", "C": "50%", "D": "100%"},
+         "B", "Standard trade estimating adds 10% to 15% to pipework quantities to allow for offcuts, bends, trimming, and small layout deviations.", "管道下料不可避免產生端頭截斷碎料（Offcuts）。水暖算量通常加入 10%-15% 的合理損耗係數，避免工人因缺料反覆停工跑批發商。", "C&G Unit 209 Estimating and Tendering"),
+
+        ("4.1",
+         "What is a 'Schedule of Rates' contract in commercial plumbing maintenance?",
+         "在商用建築或物業水暖維保工程中，「單價承包合約 (Schedule of Rates)」的核心計價模式是什麼？",
+         {"A": "The client pays whatever the plumber invents on the day", "B": "A contract where pre-agreed fixed unit prices are established for specific tasks (e.g. per meter of pipe, per tap replaced), multiplied by work actually performed", "C": "A fixed price for 100 years", "D": "Free labor for charity"},
+         {"A": "客戶每天按照水暖工隨意口頭索要的金額付款", "B": "預先在合同中約定各類標準工序的固定單價（如每更換一個龍頭多少錢、每米管道安裝多少錢），竣工按實際計量清點結算", "C": "100年不變的固定總包價", "D": "面向慈善機構的完全免費義工"},
+         "B", "A Schedule of Rates sets agreed unit costs for labor and repetitive tasks, allowing clients to commission ad-hoc repairs without retendering each job.", "單價表合同預先鎖定標準維修工項的綜合單價，特別適用於學校、醫院、連鎖商業等長期分散、無法預知具體工程量的零星維修工程。", "JCT Maintenance Contracts; C&G Unit 209"),
+
+        ("4.1",
+         "What is the function of a 'Variation Order' (Change Order) on a building site?",
+         "在建築施工合同履行過程中，「工程變更簽證單 (Variation Order / Change Order)」的法定功能是什麼？",
+         {"A": "To cancel the entire project without payment", "B": "To formally authorize, document, and price alterations, additions, or omissions from the original agreed scope of work", "C": "To change the plumber's company name", "D": "To order food from a caterer"},
+         {"A": "無償單方面撤銷整個工程合同", "B": "對超出或偏離原合同約定施工範圍的增項、減項或材料工藝變更進行正式書面授權確認並約定計價", "C": "變更水暖施工單位的公司註冊名稱", "D": "向外賣快餐店訂購午餐"},
+         "B", "A Variation Order records client-approved modifications to design or materials, establishing entitlement to additional payment and extension of time.", "任何未經書面簽字認可的口頭變更均屬於合同糾紛的高發區。變更單由業主代表簽字，鎖定工期順延與追加工程款的法定索賠依據。", "JCT Conditions of Contract; C&G Unit 209"),
+
+        ("4.1",
+         "What visual line type is universally used on engineering drawings to represent hidden outlines and concealed pipework?",
+         "在工程施工圖紙的國家製圖標準中，代表隱蔽輪廓線或牆體/地板暗埋管道的標準線型是什麼？",
+         {"A": "Solid thick continuous line", "B": "Dashed line (thin hidden detail line)", "C": "Zig-zag line", "D": "Double wavy line"},
+         {"A": "加粗實線 (Solid Continuous)", "B": "虛線 (Dashed Line - 隱蔽細虛線)", "C": "鋸齒折線", "D": "雙波浪線"},
+         "B", "BS EN ISO 128 specifies dashed lines for hidden features and concealed pipe runs behind walls, under floors, or inside ducts.", "製圖規範 BS EN ISO 128 規定：粗實線表示可見輪廓與明裝管道；均勻細虛線專門表示不可見輪廓、暗埋管線及吊頂夾層內的隱蔽管道。", "BS EN ISO 128 Technical drawings; C&G Unit 209"),
+
+        ("4.1",
+         "What drawing perspective projection shows a three-dimensional representation of a piping system with horizontal axes drawn at 30 degrees to the horizontal?",
+         "在管道系統施工深化圖中，將管道立體展現、且兩個水平基準軸均與水平線呈 30 度傾角夾角的立體投影圖被稱作什麼？",
+         {"A": "Isometric projection (Isometric drawing)", "B": "Orthographic plan view", "C": "Front elevation", "D": "Bar chart"},
+         {"A": "等軸測圖 / 軸測圖 (Isometric Drawing)", "B": "正交平面圖", "C": "正立面圖", "D": "柱狀統計圖"},
+         "A", "Isometric drawings project 3D piping layouts with axes at 30°, maintaining true lengths along axes, crucial for complex plant rooms and prefabrication.", "管系軸測圖（等軸側圖）是水暖放樣預製的靈魂：三個坐標軸以 120 度均勻分佈，使立管、橫管的立體走向、折彎標高一覽無遺。", "BS 1192 / BS EN ISO 5456; C&G Unit 209"),
+
+        ("4.2",
+         "If a solid timber joist has a depth of 240 mm, what is the statutory maximum permissible notch depth that can be cut into its top edge?",
+         "若實木地板托樑的截面高度為 240 mm，根據建築法規，其頂面允許開鑿管槽的最大法定深度是多少？",
+         {"A": "15 mm", "B": "30 mm (240 mm × 0.125)", "C": "60 mm", "D": "120 mm"},
+         {"A": "15 mm", "B": "30 mm (240 mm × 0.125 = 30 mm)", "C": "60 mm", "D": "120 mm"},
+         "B", "Maximum notch depth = 0.125 × joist depth = 0.125 × 240 mm = 30 mm.", "計算：240 mm × 0.125（即 1/8）= 30 mm。即使是 22mm 銅管加管卡，開槽也不能超過 30mm，切不可圖省事切出深豁口破壞樑身。", "Building Regulations Approved Document A Section 2"),
+
+        ("4.2",
+         "For the same 240 mm deep timber floor joist, what is the maximum permissible diameter for a pipe hole drilled on the neutral centreline?",
+         "對於上述同一根截面高度為 240 mm 的木托樑，在其高度中性軸上鑽設管道通孔時，允許的最大孔徑是多少？",
+         {"A": "30 mm", "B": "60 mm (240 mm × 0.25)", "C": "100 mm", "D": "120 mm"},
+         {"A": "30 mm", "B": "60 mm (240 mm × 0.25 = 60 mm)", "C": "100 mm", "D": "120 mm"},
+         "B", "Maximum hole diameter = 0.25 × joist depth = 0.25 × 240 mm = 60 mm.", "計算：240 mm × 0.25（即 1/4）= 60 mm。在滿足間距要求的前提下，可安全穿過 15mm、22mm 乃至 40mm 塑料排水管。", "Approved Document A Section 2; TRADA"),
+
+        ("4.2",
+         "What is the minimum permissible spacing between the centres of two adjacent holes drilled through a timber floor joist under TRADA guidelines?",
+         "根據 TRADA 木結構工程規範，在同一根木托樑上連續打多個穿管孔時，相鄰兩孔中心線之間的最小允許間距是多少？",
+         {"A": "At least 10 mm", "B": "At least 3 times the diameter of the larger hole", "C": "At least 1 meter", "D": "There is no minimum spacing"},
+         {"A": "至少 10 mm", "B": "至少為較大孔徑直徑的 3 倍 (3 × Diameter)", "C": "至少 1 米", "D": "對相鄰孔間距無任何限制"},
+         "B", "Approved Document A and TRADA require hole centres to be separated by at least 3 times the diameter of the larger hole to avoid shear cracking.", "孔與孔之間若太近，木材纖維會受剪切力劈裂。規範強制相鄰兩孔中心距不得小於 3 倍較大孔徑（例如兩個 50mm 孔中心距至少 150mm）。", "Approved Document A Section 2.B; TRADA"),
+
+        ("4.2",
+         "Why is notching strictly prohibited within 0.07 of the span from the joist support wall?",
+         "在木托樑距離支撐端牆淨跨度 0.07（7%）以內的端部區間，為什麼法規明文嚴格禁止進行任何開槽？",
+         {"A": "The wood is too dry near walls", "B": "Vertical shear stress reaches its maximum near the supports, and notching will cause catastrophic brittle shear splitting of the joist end", "C": "There is no space for pipes", "D": "The plaster will crack"},
+         {"A": "靠近牆根處木材過於乾燥", "B": "樑端支座處承受整個樓板載荷匯聚的「最大剪切應力 (Maximum Shear Stress)」，開槽會瞬間誘發樑端順紋剪切劈裂坍塌", "C": "現場狹窄無法容納管道", "D": "只會引起牆面石膏開裂"},
+         "B", "Beam shear forces peak at the supports. Cutting notches near the bearing zone destroys shear resistance, shearing the joist off its wall hangers.", "材料力學表明支座端部剪力最大。在 0.07 跨度內開槽等同於自斷樑根，承重荷載會將樑頭像劈柴一樣直接剪斷，引發樓板塌陷。", "Approved Document A; Structural Timber Eurocode 5"),
+
+        ("4.2",
+         "Why must circular holes never be drilled within 0.25 of the span from either end of a timber joist?",
+         "在木托樑兩端距離支承端 0.25（25%）跨度以內的區域，為什麼同樣禁止鑽設圓孔？",
+         {"A": "High shear forces near the ends will cause the timber web to fracture between the hole and the support", "B": "The drill bit will hit the wall", "C": "Pipes will freeze", "D": "Cables are not long enough"},
+         {"A": "端部極高的剪切力會使圓孔周圍產生巨大的剪切集中應力，造成樑端腹板順紋撕裂破壞", "B": "電鑽會撞到對面牆壁", "C": "水管在樑端會結冰", "D": "電線長度不夠長"},
+         "A", "Like notches, holes weaken shear capacity. Holes are restricted to the 0.25 to 0.40 span zone where both bending moment and shear force are moderate.", "0.25 跨度以內屬於高剪力危險區，打孔會切斷抗剪纖維引發斜向脆性拉裂。鑽孔必須選在 0.25 至 0.40 跨度這一安全平衡帶。", "Approved Document A Section 2; TRADA Wood Information Sheet"),
+
+        ("4.2",
+         "What protective accessory must be installed over pipes notched into floor joists to protect them from puncture by drywall screws or floorboard nails?",
+         "當管道不得不開槽嵌入木托樑頂部時，在鋪設地板之前，托樑上方開槽口正上方必須強制加裝何種金屬防護構件？",
+         {"A": "Heavy-duty galvanised steel safe-plates (protective steel nail plates)", "B": "Plastic adhesive tape", "C": "Rubber padding strip", "D": "Aluminium cooking foil"},
+         {"A": "重型鍍鋅防穿刺防釘鋼板 / 鋼護板 (Safe-Plates / Nail Plates)", "B": "塑料電工自粘膠帶", "C": "橡膠減震軟墊條", "D": "廚房用鋁箔紙"},
+         "A", "Steel safe-plates resist penetration from floorboard screws and ring-shank nails driven down blindly by carpenters, preventing flooded ceilings.", "木工在鋪設木地板或打石膏板螺釘時盲打極易打中水管。加裝 1.5mm 以上淬火防穿刺鋼護板能將射入的鋼釘頂彎抵擋，杜絕水管被射穿慘劇。", "NHBC Standards Chapter 6.4; BS 8000-13"),
+
+        ("4.2",
+         "When installing waste pipes through an engineered I-joist (silent floor joist with OSB web and timber flanges), what strict rule applies to the solid timber flanges?",
+         "在現代工程工字木托樑（I-Joist，由定向刨花板 OSB 腹板與上下實木翼緣組成）中穿管時，針對其上下兩側的實木翼緣（Flanges）有何絕對禁令？",
+         {"A": "Flanges can be notched up to 50%", "B": "Flanges must NEVER be cut, notched, or drilled under any circumstance", "C": "Flanges can be removed completely", "D": "Only top flanges can be notched"},
+         {"A": "翼緣板最多可以開槽 50%", "B": "任何情況下絕對嚴禁對上下實木翼緣進行任何切割、開槽、打孔或刨削！", "C": "翼緣板可以被全部鋸掉切除", "D": "只有頂部翼緣允許開槽"},
+         "B", "The solid timber flanges carry all tension and compression bending forces. Cutting an I-joist flange destroys the beam, causing immediate floor collapse.", "工字木托樑上下翼緣承受 100% 的彎矩拉力與壓力。哪怕切出一道 5mm 微小鋸痕，整個工字樑就會在人踏上時瞬間折斷崩塌，開孔只能按製造商手冊在 OSB 腹板打預留孔。", "TRADA Guidelines; Engineered Wood Association (APA)"),
+
+        ("4.2",
+         "When working on a site alongside electricians, carpenters, and plasterers, what is the best collaborative practice to resolve an unexpected physical clashes between services?",
+         "在施工現場與電工、木工、抹灰工交叉作業時，若發現水暖管道與電氣線管在吊頂內發生不可調和的空間打架衝突，專業的協調處理方式是什麼？",
+         {"A": "Cut through the electrician's conduit with a hacksaw without telling anyone", "B": "Communicate immediately with the affected trade and site supervisor to agree an orderly rerouting solution before fixing services permanently", "C": "Cover up the clash with insulation", "D": "Damage the timber joists"},
+         {"A": "用鋼鋸直接鋸斷電工的穿線管，且不告知任何人", "B": "立即主動與相關工種師傅及現場工程主管溝通，在管道永久固定前共同商定合理的改道避讓方案與施工順序", "C": "用保溫棉把打架部位蓋住掩耳盜鈴", "D": "隨意破壞木托樑強行穿管"},
+         "B", "Inter-trade liaison prevents costly rework. Cooperating to adjust routes according to standard hierarchies (gravity drainage takes priority over flexible cables) resolves clashes.", "多工種協調首要遵循管線綜合避讓原則（重力排水無壓管優先，壓力水管次之，柔性電纜避讓硬管），及時協商能避免事後返工砸牆。", "BS 8000-0 Workmanship on building sites; C&G Unit 209"),
+
+        ("4.2",
+         "What is the statutory requirement under Building Regulations Part B (Fire Safety) when a plastic soil stack or waste pipe penetrates a compartment wall or separating floor?",
+         "根據建築法規 Part B（消防安全）強制要求，當塑料排污立管或排水管穿透建築物防火分區牆或樓層防水分隔樓板時，必須採取何種防火封堵措施？",
+         {"A": "Leave an open gap for airflow", "B": "Install a certified intumescent fire collar or fire-sleeve around the plastic pipe", "C": "Wrap the pipe in cardboard", "D": "Paint the pipe red"},
+         {"A": "在穿管洞口周圍保留敞開通風縫隙", "B": "在塑料管穿越處緊密套裝經過認證的膨脹型防火止火圈（Intumescent Fire Collar）或防火套管", "C": "在管子周圍包裹瓦楞紙箱紙板", "D": "僅將塑料管外壁刷上紅漆"},
+         "B", "Plastic melts during a fire, leaving a void that breaches the fire compartment. Intumescent fire collars expand under heat to crush and seal the hole, stopping flame spread.", "塑料管在火災中極易燒熔形成貫通洞口，使烈火濃煙蔓延至樓上。膨脹防火圈遇高溫會急劇膨脹數十倍，將軟化塑料管完全擠癟封死洞口至少 2-4 小時。", "Building Regulations Approved Document B; BS 476 / BS EN 1366-3"),
+
+        ("4.2",
+         "What is the standard procedure if a plumbing operative accidentally drills into an uncharted electrical cable or gas service buried behind plasterboard?",
+         "水暖工在電鑽打孔固定管卡時，若不慎鑽透了暗埋在石膏板牆內未標記的帶電電線或燃氣管，應立即採取的應急處置流程是什麼？",
+         {"A": "Cover the hole with filler and quickly leave site", "B": "Immediately stop the drill, do not touch bare conductors, isolate the relevant supply (main switch or gas emergency control valve), evacuate if gas is leaking, and report immediately", "C": "Pull the drill bit out with bare hands", "D": "Turn on a match to inspect"},
+         {"A": "用石膏原子灰迅速抹平洞口並悄悄離開現場", "B": "立即停止電鑽動作，切勿徒手碰觸裸露線路，第一時間關閉相應總閘（總配電箱或燃氣進戶緊急截斷閥），若有燃氣洩漏立即疏散人員並向上級報告", "C": "赤手空拳一把拔下通電的鑽頭", "D": "劃根火柴靠近開孔查看是否有燃氣"},
+         "B", "Safety takes precedence. Isolate the incoming electrical fuse or gas ECV immediately to eliminate electrocution, fire, or explosion hazards.", "一旦誤傷隱蔽管線，第一要務是切斷源頭危險源（拉電閘或關燃氣總閥 ECV），嚴禁任何明火開關電器，確保人身安全後如實上報組織搶修。", "Emergency Procedures; C&G Unit 201/209"),
+
+        ("4.2",
+         "Why must a plumber provide written handover documentation and verbally demonstrate the heating system programmer/thermostat to the client upon completion?",
+         "水暖工程竣工交付時，水暖工為什麼必須向業主移交書面操作指南，並當面口頭演示供暖定時器和溫控器的操作方法？",
+         {"A": "It is required to collect extra tips", "B": "Building Regulations Part L requires providing user information so occupants can operate heating controls efficiently, reducing energy consumption and carbon emissions", "C": "To keep the plumber talking", "D": "It proves the plumber can speak English"},
+         {"A": "這是為了向業主索取額外小費的藉口", "B": "建築法規 Part L 強制要求必須向建築使用者提供充分的運維指導，確保用戶能正確操作節能溫控設備，落實建築低碳節能目標", "C": "僅僅為了拖延現場驗收時間", "D": "證明安裝工的英語口語交流水平"},
+         "B", "Part L mandates providing adequate operating and maintenance instructions so the building owner can operate systems efficiently without wasting energy.", "Part L 節能法規將「用戶指導」列為法定要求。若用戶不懂得設置定時段與回水溫差，高效節能鍋爐將淪為高耗能機器，無法達到設計能效。", "Building Regulations Approved Document L1 Section 9"),
+
+        ("4.1",
+         "What does the acronym PPE stand for in site management documentation?",
+         "在施工現場管理檔案與安全制度中，英文縮寫 PPE 代表什麼？",
+         {"A": "Plumbing Pipe Estimating", "B": "Personal Protective Equipment", "C": "Primary Pressure Emission", "D": "Pre-Planned Engineering"},
+         {"A": "水暖管道工程算量", "B": "個人防護裝備 (Personal Protective Equipment)", "C": "初級壓力排放", "D": "預先規劃工程"},
+         "B", "PPE refers to equipment worn to minimize exposure to hazards (hard hats, safety boots, eye protection, high-visibility vests).", "PPE（個人防護用品）是施工現場安全管理中最基礎的防護裝備，包含安全帽、防砸鞋、護目鏡及反光背心等。", "PPE at Work Regulations 1992; C&G Unit 201/209"),
+
+        ("4.1",
+         "What is an Operation and Maintenance (O&M) manual handed to the commercial facilities manager upon project completion?",
+         "在商用機電水暖工程竣工移交時，向物業設施維運部門（FM）移交的《運維手冊 (O&M Manual)》通常包含哪些核心文件？",
+         {"A": "As-built drawings, equipment asset register, manufacturer manuals, commissioning certificates, test logs, and maintenance schedules", "B": "Plumber lunch receipts and newspapers", "C": "A blank notebook", "D": "A set of screwdrivers"},
+         {"A": "竣工圖紙（As-built）、設備資產清冊、原廠說明書、調試驗收合格證、打壓檢測記錄日誌及定期維護保養規程", "B": "工人的午餐發票與舊報紙", "C": "一本空白記事本", "D": "一套普通手動螺絲刀"},
+         "A", "The O&M manual contains all necessary data for the safe, continuous operation, servicing, and emergency shutdown of building services installations.", "O&M 手冊是大型建築全生命週期維運的總指南，涵蓋管線真實路由竣工圖、閥門編號對照表、設備質保書及換油清灰維修週期，缺其無法通過驗收。", "BSRIA BG 1/2007 Handover and O&M Manuals; CDM 2015"),
+
+        ("4.1",
+         "On a town planning Ordnance Survey location plan drawn to a scale of 1:1250, a commercial property boundary frontage measures 40 mm. What is the real-world frontage distance?",
+         "在比例尺為 1:1250 的英國地形測量局 (Ordnance Survey) 規劃總圖上，某商務物業的沿街產權紅線面寬量測為 40 mm。現場實際紅線長度是多少米？",
+         {"A": "5 meters", "B": "12.5 meters", "C": "50 meters (40 mm × 1250 = 50,000 mm)", "D": "500 meters"},
+         {"A": "5 米", "B": "12.5 米", "C": "50 米 (40 mm × 1250 = 50,000 mm = 50 米)", "D": "500 米"},
+         "C", "Real dimension = 40 mm × 1250 = 50,000 mm = 50.0 meters. 1:1250 is standard for UK planning application site maps.", "計算：40 mm × 1250 = 50,000 mm = 50 米。1:1250 是英國市政規劃報建申請（Planning Application）中最普遍法定的紅線地形圖比例尺。", "BS EN ISO 5455; C&G Unit 209"),
+
+        ("4.1",
+         "On an engineering detail assembly drawing with a scale of 1:5, a brass valve body measures 35 mm in length on paper. What is the true manufacturing length of the valve?",
+         "在比例尺為 1:5 的機械加工大樣圖紙上，一個黃銅閥體在圖面上的長度為 35 mm。該閥門的實際製造長度是多少？",
+         {"A": "7 mm", "B": "70 mm", "C": "175 mm (0.175 m)", "D": "350 mm"},
+         {"A": "7 mm", "B": "70 mm", "C": "175 mm (35 mm × 5 = 175 mm)", "D": "350 mm"},
+         "C", "At 1:5 scale: Real length = 35 mm × 5 = 175 mm (0.175 meters).", "比例尺 1:5 常用於節點剖面與精密配件大樣：實際長度 = 35 mm × 5 = 175 mm（即 17.5 厘米）。", "BS EN ISO 5455; C&G Unit 209"),
+
+        ("4.1",
+         "What standard symbol is used on British plumbing schematics to represent a Non-Return Valve (Check Valve)?",
+         "在英國水暖工藝原理圖中，代表「單向止回閥 (Check Valve / Non-Return Valve)」的標準製圖圖形符號是什麼？",
+         {"A": "A single dot with an arrow", "B": "A bow-tie valve body with an arrowhead pointing in the permissible direction of fluid flow, or an arrow against a vertical blocking line", "C": "A plain rectangle", "D": "A circle with a cross inside"},
+         {"A": "一個帶單箭頭的實心圓點", "B": "常規領結形閥體內嵌一個指向允許流動方向的箭頭，或帶有垂直止退擋板的單向流動箭頭", "C": "一個無任何標記的空白長方形", "D": "一個帶十字叉的實心圓"},
+         "B", "BS 1553-1 depicts check valves as a valve symbol with an internal directional arrow pointing from inlet to outlet, indicating one-way flow.", "BS 1553-1 規定：單向閥採用帶流向箭頭的閥門符號，明確標註介質僅能單向流動，反向則被內部閥瓣封堵。", "BS 1553-1 Graphical symbols for piping; C&G Unit 209"),
+
+        ("4.1",
+         "What plumbing schematic symbol represents a Drain-Off Cock (BS 2879 drain valve) with hose union?",
+         "在給排水管路圖中，代表帶軟管接頭的「系統排污放水閥 (Drain-Off Cock - DOC)」的標準工程符號是什麼？",
+         {"A": "A square with a tap on top", "B": "A branch line terminating in a valve symbol with an open downward outlet or an angled hose tail line", "C": "A circle containing the letter 'P'", "D": "A zigzag line"},
+         {"A": "頂部帶水龍頭圖形的正方形", "B": "從管路引出的支管末端帶有閥門符號，並帶有朝下的開放排出口或斜向下引出的軟管外螺紋標識", "C": "包含字母 'P' 的圓圈", "D": "一條連續鋸齒折線"},
+         "B", "Drain cocks are shown on branches at low points with a valve symbol and an open-ended terminal tail for hose connection.", "排污放水閥（DOC）符號始終標記在管網的最低點，帶有單邊閥門並伸出一段開口短線，示意連接水管向地漏排水。", "BS 1553-1; C&G Unit 209"),
+
+        ("4.1",
+         "What drawing symbol represents a diaphragm expansion vessel on a sealed heating or unvented hot water schematic?",
+         "在閉式供暖或承壓熱水系統原理圖中，代表「隔膜式膨脹水箱 (Expansion Vessel)」的標準國際繪圖符號是什麼？",
+         {"A": "A plain open bucket", "B": "A circle or cylinder divided internally by a curved or diagonal line representing the flexible rubber diaphragm separating water and air", "C": "A triangle with an exclamation mark", "D": "A flame symbol"},
+         {"A": "一個普通敞口小水桶圖標", "B": "一個圓形或立式圓柱體，中間繪有一條分割弧線或斜隔線，代表將氣室與水室物理隔離的橡膠柔性隔膜", "C": "帶嘆號的警示三角形", "D": "一個火焰燃燒符號"},
+         "B", "Expansion vessels are indicated by a circle bisected by a line (the flexible membrane), denoting a pre-charged gas cushion over water.", "圖例為中間帶隔膜弧線的圓形容器，一側代表壓縮氮氣/空氣預充氣囊，另一側連接加熱管路承納膨脹水。", "BS EN ISO 10628; C&G Unit 209"),
+
+        ("4.1",
+         "Under standard construction contracts (such as JCT Minor Works), what is 'Retention Money'?",
+         "在英國標準建築合同（如 JCT 小型工程合同）中，「工程質保留置金 (Retention Money)」的機制是怎樣運作的？",
+         {"A": "A bribe paid to council inspectors", "B": "A percentage of each interim payment (typically 3% to 5%) withheld by the client to ensure the contractor remedies defects during the rectification period", "C": "A pension contribution", "D": "A tax on copper scrap"},
+         {"A": "向市政監察官員支付的違法紅包", "B": "業主從每次進度款中依法扣留一定比例（通常為 3% 至 5%），作為督促承包商在保修期內及時無償整改工程缺陷的保證金", "C": "施工人員的補充養老金", "D": "廢舊銅管回收附加稅"},
+         "B", "Retention provides financial security for the client. Half is released upon Practical Completion; the remainder is released after the Defects Liability Period (usually 6-12 months).", "質保金通常扣留 3%~5%。實質竣工驗收（Practical Completion）時釋放一半，其餘一半在缺陷責任期（6-12個月）結束且全部保修問題整改完畢後清退結算。", "JCT Minor Works Building Contract; C&G Unit 209"),
+
+        ("4.1",
+         "What is the typical duration of the 'Defects Liability Period' (Rectification Period) in domestic building contracts?",
+         "在家用建築與裝修工程合同中，「缺陷責任保修期 (Defects Liability / Rectification Period)」的常規法定合約週期通常是多久？",
+         {"A": "7 days", "B": "Typically 6 to 12 months from the date of Practical Completion", "C": "25 years", "D": "Indefinite"},
+         {"A": "7 天", "B": "自實質竣工交付之日起通常為 6 至 12 個月（經歷完整的春夏秋冬冷暖季節考驗）", "C": "25 年", "D": "無終止無限期"},
+         "B", "A 6 or 12-month defects period allows the plumbing, drainage, and heating systems to experience seasonal temperature extremes before final sign-off.", "6 到 12 個月的保修期確保系統完整經歷一個寒冷供暖季的滿負荷檢驗，此期間出現的管道接頭滲漏或散熱器不熱由承包商免費返修。", "JCT Building Contracts; C&G Unit 209"),
+
+        ("4.2",
+         "What is the 'Priority Services Register' (PSR) maintained by UK energy and water network undertakers?",
+         "英國各大水務公司與燃氣/電力公用事業網絡所建立的「優先服務名冊 (Priority Services Register - PSR)」為哪些客戶提供特殊保障？",
+         {"A": "A list of commercial corporate customers who pay highest bills", "B": "A free register providing vulnerable customers (elderly, disabled, chronic illness, families with infants) priority assistance during supply interruptions", "C": "A discount shopping club for plumbers", "D": "A government spy list"},
+         {"A": "繳費金額最高的商用大客戶清單", "B": "為弱勢群體用戶（高齡長者、殘障人士、長期透析慢病患者、帶嬰兒家庭）在水電氣突發停供時提供優先免費應急送水、供暖及通報的法定名冊", "C": "水暖工專享的批發打折會員名單", "D": "政府監控名單"},
+         "B", "The PSR ensures that vulnerable consumers receive priority emergency bottled water, alternative heating, and advance warning during main shutdowns.", "當遭遇市政供水管爆裂或大面積停氣時，水務燃氣公司會依據 PSR 名單優先為名冊上的獨居老人和呼吸機患者上門送瓶裝水或電暖器。", "Ofwat / Ofgem Consumer Protection Standards; C&G Unit 209"),
+
+        ("4.2",
+         "Under Competent Person Schemes (e.g. APHC, CIPHE, Gas Safe, NICEIC), what is the statutory benefit for a fully certified plumbing contractor?",
+         "加入由英國政府認可的「合格從業人員認證體系 (Competent Person Scheme - 如 APHC / CIPHE / Gas Safe)」的持證水暖承包商，享有哪些法定的自我核准優勢？",
+         {"A": "Immunity from paying any income tax", "B": "The legal authority to self-certify that work complies with relevant Building Regulations without having to submit costly prior notices or pay local council inspection fees", "C": "Free fuel at petrol stations", "D": "Permission to work without safety boots"},
+         {"A": "免除繳納任何個人所得稅", "B": "有權對自身完成的工程出具符合建築法規的自我認證證書，無需預先向地方議會建築檢驗部門申報備案並免繳高昂的現場查驗規費", "C": "在全英加油站免費加註汽油", "D": "被特許進入工地時無需穿著防砸鞋"},
+         "B", "Competent Person Scheme members can self-certify work under Building Regs Parts G, H, J, L, and P, issuing compliance certificates directly to the homeowner.", "持證人員可自行上傳系統備案並簽發建築法規合規證書（Compliance Certificate），極大節省客戶等待地方建築監督員（Building Control）上門排期與收費的時間成本。", "Building Act 1984; Building Regulations 2010 Schedule 3"),
+
+        ("4.2",
+         "What is a 'Witness Point' during a major commercial piping installation?",
+         "在大型商用給排水管道工程質量監控節點中，「見證點 (Witness Point)」是指什麼？",
+         {"A": "A place where pedestrians watch workers from the street", "B": "A predetermined critical inspection milestone where the client's engineer or Clerk of Works must be given notice to observe a specific test (e.g. pressure test) before work proceeds", "C": "A police reporting booth", "D": "A tea break table"},
+         {"A": "路邊行人圍觀工人施工的警戒圍欄", "B": "預先在質量計劃中設定的關鍵節點，水暖承包商必須提前書面通知監理工程師到場共同見證關鍵隱蔽試驗（如打壓試驗），確認無誤簽字後方可進入下一道工序", "C": "工地治安巡邏警亭", "D": "工人喝下午茶的休息桌"},
+         "B", "Witness points require formal notification to the supervising consultant or Clerk of Works to witness and verify testing before services are permanently concealed.", "打壓試漏、管道衝洗消毒屬於典型見證點。未經監理工程師現場親眼見證並在打壓記錄單上簽字的隱蔽管線，監理有權拒絕驗收並責令重新打壓。", "BSRIA Testing & Commissioning Guidelines; C&G Unit 209"),
+
+        ("4.2",
+         "What is the role of a 'Clerk of Works' (Quality Inspector) on a construction site?",
+         "在英國大中型建築工地上，「現場質監代表 (Clerk of Works)」的核心法定職能是什麼？",
+         {"A": "To negotiate wages with the plumber union", "B": "To independently inspect workmanship, materials, and compliance with the specification and drawings on behalf of the client", "C": "To drive the forklift truck", "D": "To issue parking fines to vans"},
+         {"A": "代表工會與施工方談判薪資福利", "B": "代表業主進行完全獨立的日常巡檢，監督施工工藝質量、材料規格是否完全符合合同技術規範及施工圖紙要求", "C": "負責在現場駕駛叉車裝卸貨物", "D": "向違規停放的工程麵包車開具罰單"},
+         "B", "The Clerk of Works acts as the client's eyes and ears on site, ensuring that work is carried out strictly to the specified quality standards.", "質監員（Clerk of Works）不受承包商管轄，直接對業主負責，逐日巡查鋼管壁厚、閥門品牌、開槽深度及保溫厚度，發現偷工減料立即叫停。", "Institute of Clerks of Works and Construction Inspectorate (ICWCI)"),
+
+        ("4.2",
+         "When an apprentice makes a measurement mistake and cuts a length of 28mm copper tube 100mm too short, what is the best supervisory response?",
+         "當現場水暖學徒工因量尺失誤，將一根 28mm 銅管鋸短了 100mm 導致無法接駁時，帶班師傅最正確的指導管理態度應當如何？",
+         {"A": "Throw the pipe at the apprentice and insult them publicly", "B": "Use it constructively as a teaching moment: review measuring techniques, check the drawings together, plan how to reuse the shorter cut piece elsewhere, and re-cut accurately", "C": "Hide the mistake and glue the pipe into the fitting with silicone", "D": "Sack the apprentice immediately on the spot"},
+         {"A": "將截斷的銅管砸向學徒工並當眾進行言語羞辱", "B": "將其作為建設性的教學引導契機：一起復盤量尺方法、重新核對圖紙標記，評估將該短管合理挪用到其他短支管，並指導其重新精確下料", "C": "隱瞞錯誤，用硅酮玻璃膠把短管糊在管件上應付", "D": "當場將學徒工無情開除轟出工地"},
+         "B", "Effective supervision mentors apprentices constructively, transforming mistakes into competence while finding practical ways to avoid material wastage.", "專業工匠以身作則，既指導學徒掌握「雙重核對、看三遍鋸一次」的嚴謹工藝，又能統籌物料調配避免浪費，營造良好的現場協作傳幫帶氛圍。", "CITB Mentoring & Apprenticeship Guidance; C&G Unit 209"),
+
+        ("4.1",
+         "What does the abbreviation 'DN' stand for when specified on engineering pipe drawings (e.g. DN25)?",
+         "在工程給排水圖紙及閥門選型表中，標註的縮寫字母「DN」（例如 DN25）代表什麼含義？",
+         {"A": "Direct Non-return", "B": "Diamètre Nominal (Nominal Diameter in mm)", "C": "Drain Network", "D": "Delivery Number"},
+         {"A": "直接單向止回", "B": "公稱直徑 (Diamètre Nominal / Nominal Diameter，以毫米 mm 為基準代號)", "C": "排水管網", "D": "送貨批次編號"},
+         "B", "DN represents Nominal Diameter under ISO standard naming (e.g. DN15 roughly equates to 1/2-inch / 15mm copper, DN20 to 3/4-inch / 22mm copper).", "DN（Nominal Diameter 公稱直徑）是國際標準化組織規定的管道及管配件標準通徑代號，既不完全等於外徑也不等於內徑，而是統一配套的基準規格數值。", "BS EN ISO 6708 Pipework components - Definition of DN"),
+
+        ("4.1",
+         "What is an 'As-Built' drawing submitted at project completion?",
+         "在水暖機電工程竣工驗收時，承包商向業主正式提交的「竣工圖 (As-Built Drawing)」是什麼？",
+         {"A": "The original architect sketch drawn before construction started", "B": "A revised final drawing that accurately reflects all deviations, actual routing, exact valve locations, and modifications installed on site", "C": "A manufacturer advertising brochure", "D": "An artist's watercolor painting of the building"},
+         {"A": "開工前建築師手繪的初始概念草圖", "B": "經過實測實量並準確修改標註了現場所有施工路由變更、隱蔽管線真實坐標、埋牆深度及閥門精確位置的最終竣工圖紙", "C": "設備製造商產品宣傳手冊", "D": "建築物外觀水彩藝術畫"},
+         "B", "As-built drawings provide an exact historical record of where pipes and cables were genuinely installed, essential for safe future building works.", "現場施工必然因躲避鋼樑而有所繞線。竣工圖如實記錄暗埋管道真實走向，避免日後業主裝修釘釘子時打穿高壓水管或電線。", "BS 1192 Collaborative production of information; CDM 2015"),
+
+        ("4.2",
+         "Why should plumbing contractors maintain public liability insurance with adequate financial cover (typically at least £2 million to £5 million)?",
+         "水暖承包企業為什麼依法必須投保額度充足的「公眾責任險 (Public Liability Insurance - 通常保額至少 200 萬至 500 萬英鎊）」？",
+         {"A": "To pay for speeding fines", "B": "To provide financial indemnity against catastrophic accidental property damage (e.g. massive flood, fire during blowlamp soldering) or third-party injury", "C": "To buy lottery tickets", "D": "To pay for client hotel dinners"},
+         {"A": "用以報銷員工開車超速罰款", "B": "為施工中意外引發的毀滅性財產損失（如動火焊接引發火災、管道爆裂泡壞豪宅名貴地板及樓下鄰居珠寶店）或第三方人身傷害提供法定的保險賠償保障", "C": "合購彩票投資", "D": "招待業主享用五星級酒店晚宴"},
+         "B", "A single joint failure or soldering flare can cause hundreds of thousands of pounds in structural water or fire damage. Public liability protects against ruinous legal liability.", "水暖行業具有天然的高水壓水浸與高溫明火動火雙重高風險。一旦泡壞實木地板或電梯機房損失動輒數十萬鎊，充足的保險是合法執業的基本底線。", "Institute of Plumbing (CIPHE) Code of Professional Standards"),
+
+        ("4.2",
+         "Under the Consumer Rights Act 2015, what implied term applies to every domestic plumbing service contract?",
+         "根據英國《2015年消費者權利法》，任何面向私人家庭用戶的水暖施工維修服務，在法律上均自動包含哪項默示法定標準？",
+         {"A": "The plumber must finish the job in 10 minutes", "B": "The service must be performed with reasonable care and skill, within a reasonable time, and at a reasonable cost if no price was fixed beforehand", "C": "All parts must be made of solid gold", "D": "The client must clean the plumber's tools"},
+         {"A": "水暖工必須在 10 分鐘內草草收工", "B": "施工服務必須具備「合理的注意義務與專業技能 (Reasonable Care and Skill)」，在合理時間內完成；且若事先未定價，收費必須處於合理水平", "C": "所有配件必須使用純金製造", "D": "業主必須無償為水暖工清洗工具"},
+         "B", "Section 49 of the Consumer Rights Act implies that every trade service must be executed with reasonable care and skill by a competent operative.", "法律默示保證：水暖工必須展現合格技師應有的工藝水平。若粗製濫造、接頭未卡緊漏水泡壞天花板，客戶有權要求免費重做並就全部衍生損失依法索賠。", "Consumer Rights Act 2015 Section 49; C&G Unit 209"),
+
+        ("4.1",
+         "What does the term 'Lead Time' mean in plumbing material procurement and ordering?",
+         "在水暖工程採購與物料管理中，「供貨採購週期 (Lead Time)」這一術語指的是什麼？",
+         {"A": "The time it takes to melt lead solder", "B": "The time span between placing an order with a manufacturer or merchant and the physical delivery of goods to the site", "C": "The working lifespan of a lead pipe", "D": "The travel time of the lead installer"},
+         {"A": "用噴燈融化一段鉛焊錫所需的時間", "B": "從正式向廠家或供應商下達採購訂單開始，直至貨物真正打包運抵施工現場驗收入庫之間的全部時間跨度", "C": "老式鉛水管的安全使用壽命", "D": "工程主帶班技師通勤所需時間"},
+         "B", "Lead time dictates ordering schedules. High-value or custom items (commercial boilers, specialized calorifiers) have long lead times (e.g. 6-8 weeks) requiring early procurement.", "定製換熱水罐或進口熱泵採購週期長達數週。項目經理必須提前倒推排程，及時下單鎖定產能，防止因一兩件核心大件未到場而導致整個工地全面停工窩工。", "Supply Chain Management in Construction; C&G Unit 209"),
+
+        ("4.2",
+         "What is the first step a plumbing supervisor should take if a written change of specification is requested by the client during an ongoing installation?",
+         "在施工正在進行時，若業主現場提出要變更衛生器具品牌或調整管路走線，現場主管師傅應當執行的第一步驟是什麼？",
+         {"A": "Agree verbally, dismantle all finished work immediately, and start rebuilding without any paperwork", "B": "Acknowledge the request, calculate the cost and time impact, submit a formal written variation quote for written client approval BEFORE commencing modified work", "C": "Refuse outright to speak to the client", "D": "Demand cash payment in hand"},
+         {"A": "口頭一口答應，立即動手砸掉剛裝好的管子，在沒有任何簽字的情況下直接改裝", "B": "記錄業主意圖，迅速核算該變更對材料費用、追加工時及整體工期的具體影響，出具正式書面變更簽證單待業主正式簽字確認後，方可組織實施變更", "C": "粗暴拒絕與業主進行任何溝通", "D": "當面向業主索要大額現金私了"},
+         "B", "All scope alterations must be costed and signed in writing before execution to protect against subsequent disputes regarding unauthorized extras and unpaid bills.", "「先簽字後動工」是防範結算扯皮的鐵律。若未經書面簽認私自改動，事後業主極易以「我只是隨口說說、沒同意加錢」為由拒付追加工程款。", "RICS Change Management Practice; C&G Unit 209"),
+
+        ("4.1",
+         "Which standard metric scale is most commonly used for detailed domestic architectural bathroom and kitchen service layout drawings?",
+         "在繪製住宅建築的衛生間及廚房內部給排水管道詳細佈置與器具定位施工圖時，最常用的標準公制比例尺是哪一種？",
+         {"A": "1:1", "B": "1:50", "C": "1:500", "D": "1:2500"},
+         {"A": "1:1 (等大實物比例)", "B": "1:50 (住宅給排水佈局最通用標準比例尺)", "C": "1:500 (總平面區塊比例)", "D": "1:2500 (市政管網大比例)"},
+         "B", "A scale of 1:50 is standard for interior building services layouts, providing sufficient detail for pipe runs, appliance clearances, and structural walls.", "1:50 比例尺（20mm 代表 1 米）兼具整體空間感與節點清晰度，是英國住宅水暖、廚衛深化設計施工圖的絕對主流標準比例。", "BS EN ISO 5455; C&G Unit 209"),
+
+        ("4.2",
+         "Under CDM 2015, what is the core legal duty of the Principal Contractor during the physical construction phase?",
+         "根據 CDM 2015 法規，在現場實體施工階段，總承包商（Principal Contractor）承擔的核心法定職責是什麼？",
+         {"A": "To design all structural steel beams", "B": "To plan, manage, monitor, and coordinate health and safety across all contractors and trades on site during construction", "C": "To pay the council tax for all sub-contractors", "D": "To manufacture plumbing fittings on site"},
+         {"A": "設計建築的所有鋼結構承重樑", "B": "全面策劃、管理、監控並協調施工現場所有進場分包商與各工種之間的健康與安全管理事務", "C": "替所有專業分包商繳納地方市政物業稅", "D": "在施工現場親自手工製造水暖管件"},
+         "B", "The Principal Contractor coordinates site health and safety throughout construction, ensuring site inductions, RAMS review, and welfare maintenance.", "總承包商是施工階段現場安全的總掌舵人：審查分包商安全施工方案（RAMS）、落實進場安全交底教育、協調不同工種交叉動火，確保合規。", "CDM Regulations 2015, Reg 13; C&G Unit 209")
+    ]
+
+    for sub_id, stem_en, stem_zh, opts_en, opts_zh, ans, exp_en, exp_zh, ref in extra_c4:
+        questions.append(make_q(4, sub_id, ["Unit_209"], stem_en, stem_zh, opts_en, opts_zh, ans, exp_en, exp_zh, ref))
+
+    return questions
+
+
+    for sub_id, stem_en, stem_zh, opts_en, opts_zh, ans, exp_en, exp_zh, ref in extra_c4:
+        questions.append(make_q(4, sub_id, ["Unit_209"], stem_en, stem_zh, opts_en, opts_zh, ans, exp_en, exp_zh, ref))
+
+    return questions

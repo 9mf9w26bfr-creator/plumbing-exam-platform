@@ -11,7 +11,7 @@ export const initialChapters: TextbookChapter[] = [
       { id: '1.3', title_en: 'Safe working at height & ladders', title_zh: '高空作業安全與梯子規範' },
       { id: '1.4', title_en: 'Hazard identification and risk assessment', title_zh: '危險源識別與風險評估' }
     ],
-    question_count: 50
+    question_count: 83
   },
   {
     id: 2,
@@ -21,7 +21,7 @@ export const initialChapters: TextbookChapter[] = [
       { id: '2.2', title_en: 'Pipe jointing techniques (soldering, compression)', title_zh: '管道連接技術 (焊接、卡壓)' },
       { id: '2.3', title_en: 'Pipe bending and clipping', title_zh: '管道彎曲與管卡固定' }
     ],
-    question_count: 50
+    question_count: 70
   },
   {
     id: 3,
@@ -32,7 +32,7 @@ export const initialChapters: TextbookChapter[] = [
       { id: '3.3', title_en: 'Pressure and head calculation', title_zh: '水壓與水頭計算' },
       { id: '3.4', title_en: 'Heat transfer (conduction, convection, radiation)', title_zh: '熱傳遞原理 (傳導、對流、輻射)' }
     ],
-    question_count: 50
+    question_count: 80
   },
   {
     id: 4,
@@ -41,7 +41,7 @@ export const initialChapters: TextbookChapter[] = [
       { id: '4.1', title_en: 'Material estimating and ordering', title_zh: '材料預估與採購' },
       { id: '4.2', title_en: 'Liaison with other building trades', title_zh: '與其他建築工種的協同溝通' }
     ],
-    question_count: 50
+    question_count: 60
   },
   {
     id: 5,
@@ -51,7 +51,7 @@ export const initialChapters: TextbookChapter[] = [
       { id: '5.2', title_en: 'Cold water storage cisterns (CWSC)', title_zh: '冷水儲水箱規格與安裝' },
       { id: '5.3', title_en: 'Water regulations and backflow prevention', title_zh: '水事法規與防回流污染等級 (Fluid Categories)' }
     ],
-    question_count: 50
+    question_count: 90
   },
   {
     id: 6,
@@ -61,7 +61,7 @@ export const initialChapters: TextbookChapter[] = [
       { id: '6.2', title_en: 'Unvented hot water storage & safety controls', title_zh: '閉式(承壓型)熱水儲水系統與三級安全保護' },
       { id: '6.3', title_en: 'Legionella prevention and TMV regulation', title_zh: '軍團菌防治與恆溫混水閥 (TMV) 控制' }
     ],
-    question_count: 50
+    question_count: 90
   },
   {
     id: 7,
@@ -70,7 +70,7 @@ export const initialChapters: TextbookChapter[] = [
       { id: '7.1', title_en: 'Heat emitters and pipe sizing', title_zh: '散熱器類型與管徑計算' },
       { id: '7.2', title_en: 'System controls (S-Plan, Y-Plan, TRVs)', title_zh: '供暖控制系統 (S-Plan, Y-Plan, 恆溫閥)' }
     ],
-    question_count: 50
+    question_count: 90
   },
   {
     id: 8,
@@ -79,7 +79,7 @@ export const initialChapters: TextbookChapter[] = [
       { id: '8.1', title_en: 'Gutters and downpipes sizing', title_zh: '天溝與落水管尺寸規劃' },
       { id: '8.2', title_en: 'Rainwater harvesting principles', title_zh: '雨水收集利用基本原理' }
     ],
-    question_count: 50
+    question_count: 60
   },
   {
     id: 9,
@@ -88,7 +88,7 @@ export const initialChapters: TextbookChapter[] = [
       { id: '9.1', title_en: 'Sanitary appliances installation', title_zh: '衛生器具安裝要求與間距' },
       { id: '9.2', title_en: 'Discharge stack systems and trap seal loss', title_zh: '排水立管系統與存水彎水封防破壞' }
     ],
-    question_count: 50
+    question_count: 90
   },
   {
     id: 10,
@@ -97,7 +97,7 @@ export const initialChapters: TextbookChapter[] = [
       { id: '10.1', title_en: 'Fuel storage and supply guidelines', title_zh: '燃料儲存與輸送指引' },
       { id: '10.2', title_en: 'Combustion and ventilation requirements', title_zh: '燃燒與通風要求' }
     ],
-    question_count: 50
+    question_count: 70
   },
   {
     id: 11,
@@ -107,21 +107,21 @@ export const initialChapters: TextbookChapter[] = [
       { id: '11.2', title_en: 'Bathroom zoning (Zone 0, 1, 2) and IP ratings', title_zh: '浴室電氣分區 (Zone 0, 1, 2) 與 IP 防護等級' },
       { id: '11.3', title_en: 'Equipotential bonding and earthing', title_zh: '等電位聯結與接地保護' }
     ],
-    question_count: 50
+    question_count: 40
   }
 ];
 
 export const initialUnits: ExamUnit[] = [
-  { id: 'Unit_201', title: 'Health & Safety', category: 'Core', question_count: 50 },
-  { id: 'Unit_202', title: 'Scientific Principles', category: 'Core', question_count: 50 },
-  { id: 'Unit_203', title: 'Common Plumbing Processes', category: 'Core', question_count: 50 },
-  { id: 'Unit_204', title: 'Cold Water Systems', category: 'Technical', question_count: 50 },
-  { id: 'Unit_205', title: 'Hot Water Systems', category: 'Technical', question_count: 50 },
-  { id: 'Unit_206', title: 'Sanitation & Drainage', category: 'Technical', question_count: 100 },
-  { id: 'Unit_207', title: 'Central Heating Systems', category: 'Technical', question_count: 100 },
-  { id: 'Unit_208', title: 'Electrical Principles', category: 'Technical', question_count: 50 },
-  { id: 'Unit_209', title: 'Communication / Planning', category: 'Professional', question_count: 50 },
-  { id: 'Unit_ENV', title: 'Environmental Revision', category: 'Environmental Revision', question_count: 50 }
+  { id: 'Unit_201', title: 'Health & Safety', category: 'Core', question_count: 83 },
+  { id: 'Unit_202', title: 'Scientific Principles', category: 'Core', question_count: 80 },
+  { id: 'Unit_203', title: 'Common Plumbing Processes', category: 'Core', question_count: 70 },
+  { id: 'Unit_204', title: 'Cold Water Systems', category: 'Technical', question_count: 90 },
+  { id: 'Unit_205', title: 'Hot Water Systems', category: 'Technical', question_count: 90 },
+  { id: 'Unit_206', title: 'Sanitation & Drainage', category: 'Technical', question_count: 150 },
+  { id: 'Unit_207', title: 'Central Heating Systems', category: 'Technical', question_count: 160 },
+  { id: 'Unit_208', title: 'Electrical Principles', category: 'Technical', question_count: 40 },
+  { id: 'Unit_209', title: 'Communication / Planning', category: 'Professional', question_count: 60 },
+  { id: 'Unit_ENV', title: 'Environmental Revision', category: 'Environmental Revision', question_count: 70 }
 ];
 
 export const initialQuestions: Question[] = questionsBank as Question[];
