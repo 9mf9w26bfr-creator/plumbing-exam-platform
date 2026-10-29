@@ -80,8 +80,12 @@ export const api = {
     return res.json();
   },
 
-  async getMockExam(limit: number = 10): Promise<Question[]> {
-    const res = await requestWithFallback(`/questions/mock-exam?limit=${limit}`, { cache: 'no-store' });
+  async getMockExam(limit: number = 10, unitId?: string): Promise<Question[]> {
+    let path = `/questions/mock-exam?limit=${limit}`;
+    if (unitId && unitId !== 'all') {
+      path += `&unit_id=${encodeURIComponent(unitId)}`;
+    }
+    const res = await requestWithFallback(path, { cache: 'no-store' });
     if (!res.ok) throw new Error('Failed to fetch mock exam');
     return res.json();
   },

@@ -78,11 +78,18 @@ def get_questions_by_unit(
 
 @router.get("/mock-exam", response_model=List[QuestionResponse])
 def get_mock_exam(
-    limit: int = Query(default=10, ge=1, le=50),
+    limit: int = Query(default=10, ge=1, le=100),
+    unit_id: Optional[str] = None,
     db: Session = Depends(get_db)
 ):
-    """Generate a timed mock exam draw from all published questions."""
-    questions = db.query(Question).filter(Question.status == QuestionStatus.Published).all()
+    """Generate a timed mock exam draw from all published questions, optionally filtered by qualification unit."""
+    query = db.query(Question).filter(Question.status == QuestionStatus.Published)
+    if unit_id and unit_id != "all":
+        query = query.join(QuestionUnitMapping, Question.id == QuestionUnitMapping.question_id).filter(
+            QuestionUnitMapping.unit_id == unit_id
+        )
+
+    questions = query.all()
     if not questions:
         return []
 

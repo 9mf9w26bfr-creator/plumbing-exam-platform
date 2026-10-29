@@ -4,6 +4,7 @@ import { dataStore } from '@/data/store';
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const limit = parseInt(searchParams.get('limit') || '10');
-  const questions = dataStore.getMockExam(limit);
+  const unitId = searchParams.get('unit_id');
+  const questions = dataStore.getMockExam(limit, unitId);
   return NextResponse.json(questions);
 }

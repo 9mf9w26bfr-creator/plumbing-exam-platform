@@ -105,6 +105,15 @@ const translations: Record<string, { zh: string; en: string }> = {
   discard: { zh: '放棄記錄', en: 'Discard' },
   inProgress: { zh: '進行中', en: 'In Progress' },
   autoSavedTip: { zh: '做題進度已即時自動留存，中途退出或斷線可隨時原題繼續', en: 'Progress auto-saved in real-time. Safe to exit or disconnect anytime.' },
+
+  // Unit-Based Mock Exams
+  mockUnitTab: { zh: '按 Units 單元專項全真模考', en: 'Unit-by-Unit Mock Exams' },
+  mockAllTab: { zh: '全科綜合全真大考 (All-Units)', en: 'Comprehensive Full Mock Exam' },
+  selectUnitToExam: { zh: '選擇要進行模擬考核的認證單元 (Units)', en: 'Select Qualification Unit for Timed Exam' },
+  startUnitMock: { zh: '開始單元全真模考', en: 'Start Unit Mock Exam' },
+  startAllMock: { zh: '開始全科綜合大考', en: 'Start Full Mock Exam' },
+  selectedUnit: { zh: '當前選擇單元', en: 'Selected Unit' },
+  allCategories: { zh: '所有分類', en: 'All Categories' },
 };
 
 const getInitialLanguage = (): Language => {

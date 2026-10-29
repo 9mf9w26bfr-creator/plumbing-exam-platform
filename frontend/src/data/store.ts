@@ -44,8 +44,11 @@ export const dataStore = {
     );
   },
 
-  getMockExam(limit: number = 10) {
-    const published = questions.filter((q) => q.status === 'Published');
+  getMockExam(limit: number = 10, unitId?: string | null) {
+    let published = questions.filter((q) => q.status === 'Published');
+    if (unitId && unitId !== 'all') {
+      published = published.filter((q) => q.units?.includes(unitId));
+    }
     const shuffled = [...published].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, Math.min(limit, published.length));
   },

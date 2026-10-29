@@ -207,9 +207,9 @@ export default function Home() {
     }
   };
 
-  // Start Mock Exam
-  const handleStartMockExam = async (count: number, durationMinutes: number) => {
-    const sessionKey = 'mock_mock_session';
+  // Start Mock Exam (Supports Unit-by-Unit and Comprehensive Modes)
+  const handleStartMockExam = async (count: number, durationMinutes: number, unitId?: string) => {
+    const sessionKey = unitId && unitId !== 'all' ? `mock_${unitId}` : 'mock_all';
     const saved = storage.getQuizSession(sessionKey);
 
     if (saved && saved.questions && saved.questions.length > 0 && (saved.timeLeft === undefined || saved.timeLeft > 0)) {
@@ -222,25 +222,30 @@ export default function Home() {
         onCancel: async () => {
           storage.clearQuizSession(sessionKey);
           setResumePrompt(null);
-          await startFreshMock(count, durationMinutes);
+          await startFreshMock(count, durationMinutes, unitId);
         },
       });
       return;
     }
 
-    await startFreshMock(count, durationMinutes);
+    await startFreshMock(count, durationMinutes, unitId);
   };
 
-  const startFreshMock = async (count: number, durationMinutes: number) => {
+  const startFreshMock = async (count: number, durationMinutes: number, unitId?: string) => {
     try {
       setLoadingData(true);
-      const questions = await api.getMockExam(count);
+      const questions = await api.getMockExam(count, unitId);
+      const unitObj = units.find((u) => u.id === unitId);
+      const title = unitId && unitId !== 'all' && unitObj
+        ? `${unitObj.id} (${unitObj.title}) ${language === 'zh' ? '全真單元模擬考' : 'Simulated Unit Exam'}`
+        : (language === 'zh' ? 'City & Guilds 6035 / 8202 全科綜合模擬大考' : 'City & Guilds Comprehensive Mock Exam');
+
       setQuizState({
         questions,
-        title: language === 'zh' ? 'City & Guilds 全真模擬測試' : 'City & Guilds Simulated Mock Exam',
+        title,
         mode: 'mock',
         targetType: 'mock',
-        targetId: 'mock_session',
+        targetId: unitId && unitId !== 'all' ? unitId : 'all',
         durationMinutes,
         initialIndex: 0,
       });
@@ -456,8 +461,10 @@ export default function Home() {
 
             {activeTab === 'mock' && (
               <MockExamConfig
+                units={units}
                 totalAvailable={totalPublishedQuestions}
                 onStartExam={handleStartMockExam}
+                activeSessions={activeSessions}
               />
             )}
 
